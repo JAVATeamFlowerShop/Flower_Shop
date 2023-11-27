@@ -23,12 +23,12 @@ public class Main {
             }
         }
     }
-    private static double readDouble(String message){
+    private static double readFloat(String message){
         while (true){
             System.out.println(message);
-            double d;
+            float d;
             try {
-                d = in.nextDouble();
+                d = in.nextFloat();
                 in.nextLine();
                 return d;
             }
