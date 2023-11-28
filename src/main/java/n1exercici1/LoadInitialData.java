@@ -30,8 +30,16 @@ public class LoadInitialData {
     }
     private static void createStock(List<String[]> fileData){
         fileData.forEach(s -> {
+            float price = Float.parseFloat(s[1]);
             if (s[0].equalsIgnoreCase("flower")) {
-
+                FlowerShop.stockAdd(new Flower(price,s[2]));
+            }
+            else if(s[0].equalsIgnoreCase("tree")){
+                float height = Float.parseFloat(s[2]);
+                FlowerShop.stockAdd(new Tree(price, height));
+            }
+            else{
+                FlowerShop.stockAdd(new Decoration(price, s[2]));
             }
         });
     }
