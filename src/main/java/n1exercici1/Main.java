@@ -9,15 +9,15 @@ public class Main {
         boolean exit = false;
         do{
             switch (menu()){
-                case 1 -> System.out.println("Create flower shop\n");
-                case 2 -> System.out.println("Add product to stock\n");
-                case 3 -> System.out.println("Remove product from stock\n");
-                case 4 -> System.out.println("Show all products in stock\n");
-                case 5 -> System.out.println("Show total stock with quantities\n");
-                case 6 -> System.out.println("Show total flower shop value\n");
-                case 7 -> System.out.println("Create purchase receipts (multiple products)\n");
-                case 8 -> System.out.println("Show list previous purchases\n");
-                case 9 -> System.out.println("Show total sales income\n");
+                case 1 -> createFlowerShop();
+                case 2 -> addProductStock;
+                case 3 -> removeProductStock();
+                case 4 -> showAllStock();
+                case 5 -> showStockQuantities();
+                case 6 -> showShopValue();
+                case 7 -> createPurchaseReceipt();
+                case 8 -> showPreviousPurchases();
+                case 9 -> showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
                     System.out.println("Bye! You exited flower shop management.");
