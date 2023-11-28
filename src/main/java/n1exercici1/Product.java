@@ -2,10 +2,12 @@ package n1exercici1;
 
 public abstract class Product {
 
-    private float price;
+    private final float price;
+    protected static int idProd;
+    protected int quantity;
 
-    public Product(float price)
-    {
+    public Product(float price) {
+        idProd++;
         this.price = price;
     }
 
