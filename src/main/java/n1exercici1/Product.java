@@ -1,21 +1,17 @@
 package n1exercici1;
 
 public abstract class Product {
-
     private final float price;
-
     private int quantity;
-
     private final String name;
-
     protected static int idProd;
 
-    public Product(float price, int quantity, String name)
+    public Product(float price, String name)
     {
         this.price = price;
         idProd++;
-        this.quantity = quantity;
         this.name = name;
+        this.quantity = 1;
     }
 
     public float getPrice() {
@@ -23,7 +19,7 @@ public abstract class Product {
     }
 
     public static int getId() {
-        return id;
+        return idProd;
     }
 
     public String getName() {
@@ -43,4 +39,5 @@ public abstract class Product {
     {
         this.quantity += quantity;
     }
+
 }

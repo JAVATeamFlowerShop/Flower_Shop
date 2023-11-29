@@ -28,7 +28,7 @@ public class LoadInitialData {
         String colour = flowerList[2];
         return new Flower(price, colour);
     }
-    private static void createStock(List<String[]> fileData){
+    public static void createStock(List<String[]> fileData){
         fileData.forEach(s -> {
             float price = Float.parseFloat(s[1]);
             if (s[0].equalsIgnoreCase("flower")) {
