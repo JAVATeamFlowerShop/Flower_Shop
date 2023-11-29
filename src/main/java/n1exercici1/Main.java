@@ -1,9 +1,9 @@
 package n1exercici1;
 
-import java.util.*;
-
 public class Main {
+
     public static void main(String[] args) {
+        FlowerShop myShop = createFlowerShop();
         loop();
     }
 
@@ -11,15 +11,14 @@ public class Main {
         boolean exit = false;
         do{
             switch (menu()){
-                case 1 -> createFlowerShop();
-                case 2 -> addProductStock;
-                case 3 -> removeProductStock();
-                case 4 -> showAllStock();
-                case 5 -> showStockQuantities();
-                case 6 -> showShopValue();
-                case 7 -> createPurchaseReceipt();
-                case 8 -> showPreviousPurchases();
-                case 9 -> showTotalSalesIncome();
+//                case 1 -> addProductStock;
+//                case 2 -> removeProductStock();
+//                case 3 -> showAllStock();
+//                case 4 -> showStockQuantities();
+                case 5 -> showShopValue();
+//                case 6 -> createPurchaseReceipt();
+//                case 7 -> showPreviousPurchases();
+//                case 8 -> showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
                     System.out.println("Bye! You exited flower shop management.");
@@ -29,73 +28,28 @@ public class Main {
         } while (!exit);
     }
     private static int menu(){
-        System.out.println("FLOWER SHOP MANAGEMENT\n" +
-                "1- Create flower shop\n" +
-                "2- Add product to stock\n" +
-                "3- Remove product from stock\n" +
-                "4- Show all products in stock\n" +
-                "5- Show stock with quantities\n" +
-                "6- Show total flower shop value\n" +
-                "7- Create purchase receipts with multiple products\n" +
-                "8- Show list of previous purchases\n" +
-                "9- Show total sales income\n" +
+        System.out.printf("\n'%s' FLOWER SHOP MANAGEMENT%n", myShop.getName().toUpperCase());
+        return Readers.readInt("1- Add product to stock\n" +
+                "2- Remove product from stock\n" +
+                "3- Show all products in stock\n" +
+                "4- Show stock with quantities\n" +
+                "5- Show total flower shop value\n" +
+                "6- Create purchase receipts with multiple products\n" +
+                "7- Show list of previous purchases\n" +
+                "8- Show total sales income\n" +
                 "0- Exit\n" +
                 "Choose an option: ");
-        return readInt();
     }
-    private static Scanner in = new Scanner(System.in);
 
-    private static int readInt(String message){
-        while (true){
-            System.out.println(message);
-            int i;
-            try {
-                i = in.nextInt();
-                in.nextLine();
-                return i;
-            }
-            catch(InputMismatchException ex) {
-                System.out.println("Error de format, introdueix un enter");
-                in.nextLine();
-            }
-        }
+    private static FlowerShop createFlowerShop(){
+        System.out.printf("Welcome to the management app for your flower shop!\n");
+        return FlowerShop.createFlowerShop();
     }
-    private static double readFloat(String message){
-        while (true){
-            System.out.println(message);
-            float d;
-            try {
-                d = in.nextFloat();
-                in.nextLine();
-                return d;
-            }
-            catch(InputMismatchException ex) {
-                System.out.println("Error de format, introdueix un número decimal");
-                in.nextLine();
-            }
-        }
+
+    private static void showShopValue(){
+        String stockValue = String.format("%.2f", FlowerShop.calcValue());
+        System.out.printf("Shop's stock value is: %s eur\n", stockValue);
     }
-    private static String readString(String message){
-        while (true){
-            System.out.println(message);
-            String s;
-            try {
-                s = in.nextLine();
-                boolean allDigits = true;
-                for(int i = 0; i < s.length(); ++i) {
-                    char c = s.charAt(i);
-                    if(Character.isAlphabetic(c)){
-                        allDigits = false;
-                    }
-                }
-                if(allDigits){
-                    throw new Exception();
-                }
-                return s;
-            }
-            catch(Exception ex) {
-                System.out.println("Error de format, introdueix només caràcters alfabètics");
-            }
-        }
-    }
+
+
 }
