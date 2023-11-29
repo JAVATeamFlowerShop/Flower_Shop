@@ -1,9 +1,9 @@
 package n1exercici1;
 
 public class Main {
+    static FlowerShop myShop = createFlowerShop();
 
     public static void main(String[] args) {
-        FlowerShop myShop = createFlowerShop();
         loop();
     }
 
@@ -11,9 +11,9 @@ public class Main {
         boolean exit = false;
         do{
             switch (menu()){
-//                case 1 -> addProductStock;
+                case 1 -> FlowerShop.addProduct();
 //                case 2 -> removeProductStock();
-//                case 3 -> showAllStock();
+                case 3 -> showAllStock();
 //                case 4 -> showStockQuantities();
                 case 5 -> showShopValue();
 //                case 6 -> createPurchaseReceipt();
@@ -42,13 +42,17 @@ public class Main {
     }
 
     private static FlowerShop createFlowerShop(){
-        System.out.printf("Welcome to the management app for your flower shop!\n");
+        System.out.println("Welcome to the management app for your flower shop!\n");
         return FlowerShop.createFlowerShop();
     }
 
     private static void showShopValue(){
         String stockValue = String.format("%.2f", FlowerShop.calcValue());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
+    }
+
+    private static void showAllStock(){
+        myShop.getStock().forEach(product -> System.out.println(product + "\n"));
     }
 
 

@@ -6,12 +6,12 @@ public abstract class Product {
     private final String name;
     protected static int idProd;
 
-    public Product(float price, String name)
+    public Product(float price, String name, int quantity)
     {
         this.price = price;
         idProd++;
         this.name = name;
-        this.quantity = 1;
+        this.quantity = quantity;
     }
 
     public float getPrice() {
