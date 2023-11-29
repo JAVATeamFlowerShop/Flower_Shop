@@ -7,15 +7,13 @@ import java.util.Optional;
 public class FlowerShop {
 
     private String name;
-    private List<Product> stock;
+    private static List<Product> stock;
     private float stockValue;
     private List<Ticket> ticketHistory;
-    private static FlowerShop instanceM
 
-    private FlowerShop(String name)
-    {
+    public FlowerShop(String name) {
         this.name = name;
-        this.stock = new ArrayList<Product>();
+        stock = new ArrayList<Product>();
         this.stockValue = calcValue();
         this.ticketHistory = new ArrayList<Ticket>();
     }
@@ -27,12 +25,11 @@ public class FlowerShop {
         return stock;
     }
 
-
-    public float calcValue(){
-        if (this.stock.isEmpty()){
+    public static float calcValue(){
+        if (stock.isEmpty()){
             return 0f;
         } else {
-            return (float) this.stock.stream().mapToDouble(prod -> prod.getPrice() * prod.getQuantity()).sum();
+            return (float) stock.stream().mapToDouble(prod -> prod.getPrice() * prod.getQuantity()).sum();
         }
     }
 
@@ -48,43 +45,39 @@ public class FlowerShop {
         }
         LoadInitialData.createStock();
     }
-    public void addProduct() throws IllegalArgumentException
+    public static void addProduct() throws IllegalArgumentException
     {
+        int type = Readers.readInt("Introduce the product type\n " +
+                "1. Decoration\n" +
+                "2. Flower\n " +
+                "3. Tree");
+        int quantity = Readers.readInt("Introduce its quantity");
         String name = Readers.readString("Introduce its name");
         float price = Readers.readFloat("Introduce its price");
-        int quantity = Readers.readInt("Introduce its quantity");
-
-        int type = Readers.readInt("Introduce its type " +
-                            "1. Decoration " +
-                            "2. Flower " +
-                            "3. Tree ");
-
         switch(type)
         {
             case 1:
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                Decoration decoration = new Decoration(price, material, name);
+                Decoration decoration = new Decoration(price, material, name, quantity);
                 stock.add(decoration);
                 break;
 
             case 2:
                 String colour = Readers.readString("Introduce its colour");
-                Flower flower = new Flower(price, colour, name);
+                Flower flower = new Flower(price, colour, name, quantity);
                 stock.add(flower);
                 break;
 
             case 3:
                 float height = Readers.readFloat("Introduce its height");
-                Tree tree = new Tree(price, height, name);
+                Tree tree = new Tree(price, height, name, quantity);
                 stock.add(tree);
                 break;
 
             default:
                 System.out.println("This option is not valid");
         }
-
-
     }
 
     public void removeProduct()
