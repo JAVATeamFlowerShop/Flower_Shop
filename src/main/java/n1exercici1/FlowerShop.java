@@ -3,7 +3,6 @@ package n1exercici1;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 public class FlowerShop {
 
@@ -11,8 +10,9 @@ public class FlowerShop {
     private List<Product> stock;
     private float stockValue;
     private List<Ticket> ticketHistory;
+    private static FlowerShop instanceM
 
-    public FlowerShop(String name)
+    private FlowerShop(String name)
     {
         this.name = name;
         this.stock = new ArrayList<Product>();
@@ -46,8 +46,7 @@ public class FlowerShop {
                 shopName = Readers.readString("Introduce the name again: ");
             }
         }
-        //TODO
-        //LoadInitialData.createStock();
+        LoadInitialData.createStock();
     }
     public void addProduct() throws IllegalArgumentException
     {

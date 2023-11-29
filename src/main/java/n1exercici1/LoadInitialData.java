@@ -6,9 +6,9 @@ import java.util.*;
 public class LoadInitialData {
     private static final String currDir = System.getProperty("user.dir");
     private static final String initialDataPath = currDir + "/src/main/resources/initialStock.csv";
-    private static List<String[]> readFilePath(String path){
+    private static List<String[]> readFilePath(){
         System.out.println("Reading data file...");
-        File file = new File(path);
+        File file = new File(initialDataPath);
         List<String[]> fileData = new ArrayList<>();
         try {
             Scanner myScanner = new Scanner(file);
@@ -23,23 +23,20 @@ public class LoadInitialData {
         }
         return fileData;
     }
-    private static Flower createFlowers(String[] flowerList){
-        float price = Float.parseFloat(flowerList[1]);
-        String colour = flowerList[2];
-        return new Flower(price, colour);
-    }
-    public static void createStock(List<String[]> fileData){
+    public static void createStock(){
+        List<String[]> fileData = readFilePath();
         fileData.forEach(s -> {
-            float price = Float.parseFloat(s[1]);
+            float price = Float.parseFloat(s[2]);
             if (s[0].equalsIgnoreCase("flower")) {
-                FlowerShop.stockAdd(new Flower(price,s[2]));
+                FlowerShop.stockAdd(new Flower(s[1],price,s[3]));
             }
             else if(s[0].equalsIgnoreCase("tree")){
-                float height = Float.parseFloat(s[2]);
-                FlowerShop.stockAdd(new Tree(price, height));
+                float height = Float.parseFloat(s[3]);
+                FlowerShop.stockAdd(new Tree(s[1],price,height));
             }
             else{
-                FlowerShop.stockAdd(new Decoration(price, s[2]));
+                Decoration.Material material = Enum.valueOf(Decoration.Material.class, s[3]);
+                FlowerShop.stockAdd(new Decoration(s[1],price, material));
             }
         });
     }

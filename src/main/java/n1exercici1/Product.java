@@ -6,11 +6,11 @@ public abstract class Product {
     private final String name;
     protected static int idProd;
 
-    public Product(float price, String name)
+    public Product(String name, float price)
     {
-        this.price = price;
         idProd++;
         this.name = name;
+        this.price = price;
         this.quantity = 1;
     }
 
