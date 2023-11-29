@@ -25,7 +25,7 @@ public class FlowerShop {
         return stock;
     }
 
-    public static float calcValue(){
+    private float calcValue(){
         if (stock.isEmpty()){
             return 0f;
         } else {
@@ -43,9 +43,21 @@ public class FlowerShop {
                 shopName = Readers.readString("Introduce the name again: ");
             }
         }
-        LoadInitialData.createStock();
     }
-    public static void addProduct() throws IllegalArgumentException
+    public void addProduct(Product product){
+        if(stock.stream().anyMatch(p-> p.equals(product))){
+            System.out.println("Product already in stock, quantity will be added");
+            stock.stream()
+                    .filter(p-> p.equals(product))
+                    .forEach(p-> p.increaseQuantity(product.getQuantity()));
+        }
+        else {
+            System.out.println("Product added to stock");
+            stock.add(product);
+        }
+
+    }
+    public void addProductUser() throws IllegalArgumentException
     {
         int type = Readers.readInt("Introduce the product type\n " +
                 "1. Decoration\n" +
@@ -59,19 +71,19 @@ public class FlowerShop {
             case 1:
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                Decoration decoration = new Decoration(price, material, name, quantity);
+                Decoration decoration = new Decoration(name,price, material, quantity);
                 stock.add(decoration);
                 break;
 
             case 2:
                 String colour = Readers.readString("Introduce its colour");
-                Flower flower = new Flower(price, colour, name, quantity);
+                Flower flower = new Flower(name,price, colour, quantity);
                 stock.add(flower);
                 break;
 
             case 3:
                 float height = Readers.readFloat("Introduce its height");
-                Tree tree = new Tree(price, height, name, quantity);
+                Tree tree = new Tree(name, price, height, quantity);
                 stock.add(tree);
                 break;
 
@@ -104,7 +116,7 @@ public class FlowerShop {
         }
     }
 
-    public Product findProduct(String name)
+    private Product findProduct(String name)
     {
         Optional<Product> product = stock.stream()
                 .filter(item -> item.getName().equals(name))
@@ -112,6 +124,13 @@ public class FlowerShop {
 
         return product.get();
 
+    }
+    public void showAllStock(){
+        this.getStock().forEach(product -> System.out.println(product + "\n"));
+    }
+    public void showShopValue(){
+        String stockValue = String.format("%.2f", this.calcValue());
+        System.out.printf("Shop's stock value is: %s eur\n", stockValue);
     }
 
 

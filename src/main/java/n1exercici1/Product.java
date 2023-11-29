@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import java.util.Comparator;
+
 public abstract class Product {
     private final float price;
     private int quantity;
@@ -39,5 +41,7 @@ public abstract class Product {
     {
         this.quantity += quantity;
     }
-
+    public boolean equals(Product p){
+        return p.getName().equalsIgnoreCase(this.name) && p.getPrice() == this.price;
+    }
 }
