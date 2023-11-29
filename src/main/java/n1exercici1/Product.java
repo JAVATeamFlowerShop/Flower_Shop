@@ -1,19 +1,19 @@
 package n1exercici1;
 
-public class Product {
+public abstract class Product {
 
-    private float price;
+    private final float price;
 
     private int quantity;
 
-    private String name;
+    private final String name;
 
-    private static int id;
+    protected static int idProd;
 
     public Product(float price, int quantity, String name)
     {
         this.price = price;
-        id++;
+        idProd++;
         this.quantity = quantity;
         this.name = name;
     }

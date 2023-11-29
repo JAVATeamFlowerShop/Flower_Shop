@@ -6,15 +6,15 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class FlowerShop {
-
-    List<Product> stock;
+    
+    private String name;
+    private List<Product> stock;
+    private float stockValue;
 
     public FlowerShop()
     {
         stock = new ArrayList<Product>();
     }
-
-
 
     public void addProduct() throws IllegalArgumentException
     {
@@ -144,5 +144,6 @@ public class FlowerShop {
 
         return input;
     }
+>>>
 
 }
