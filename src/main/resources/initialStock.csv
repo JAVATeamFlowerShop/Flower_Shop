@@ -1,5 +1,5 @@
-type, price, additional
-tree, 45.99, 0.95
-flower, 3.5, red
-decoration, 14.75, wood
-decoration, 12.99, plastic
+type,name, price, additional, quantity
+tree, idk,45.99,0.95,5
+flower,rose,3.5,red,100
+decoration,floral,14.75,WOOD,6
+decoration,nidea,12.99,PLASTIC,12

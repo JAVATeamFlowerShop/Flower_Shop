@@ -64,7 +64,7 @@ public class Readers {
                 return d;
             }
             catch(InputMismatchException ex) {
-                System.out.println("Format error. Please introduce decimal.");
+                System.out.println("Format error. Please introduce decimal number.");
                 in.nextLine();
             }
         }

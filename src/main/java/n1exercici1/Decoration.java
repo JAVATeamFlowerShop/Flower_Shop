@@ -6,8 +6,8 @@ public class Decoration extends Product{
     private Material material;
     private final int id;
 
-    public Decoration(float price, Material material, String name, int quantity) {
-        super(price, name, quantity);
+    public Decoration(String name, float price, Material material, int quantity) {
+        super(name, price, quantity);
         this.material = material;
         this.id = Product.idProd;
     }

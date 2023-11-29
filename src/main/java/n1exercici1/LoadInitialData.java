@@ -6,9 +6,12 @@ import java.util.*;
 public class LoadInitialData {
     private static final String currDir = System.getProperty("user.dir");
     private static final String initialDataPath = currDir + "/src/main/resources/initialStock.csv";
-    private static List<String[]> readFilePath(String path){
+    private static final String TYPE_FLOWER = "flower";
+    private static final String TYPE_TREE = "tree";
+    private static final String TYPE_DECORATION = "decoration";
+    private static List<String[]> readFilePath(){
         System.out.println("Reading data file...");
-        File file = new File(path);
+        File file = new File(initialDataPath);
         List<String[]> fileData = new ArrayList<>();
         try {
             Scanner myScanner = new Scanner(file);
@@ -23,24 +26,25 @@ public class LoadInitialData {
         }
         return fileData;
     }
-//    private static Flower createFlowers(String[] flowerList){
-//        float price = Float.parseFloat(flowerList[1]);
-//        String colour = flowerList[2];
-//        return new Flower(price, colour);
-//    }
-//    public static void createStock(List<String[]> fileData){
-//        fileData.forEach(s -> {
-//            float price = Float.parseFloat(s[1]);
-//            if (s[0].equalsIgnoreCase("flower")) {
-//                FlowerShop.stockAdd(new Flower(price,s[2]));
-//            }
-//            else if(s[0].equalsIgnoreCase("tree")){
-//                float height = Float.parseFloat(s[2]);
-//                FlowerShop.stockAdd(new Tree(price, height));
-//            }
-//            else{
-//                FlowerShop.stockAdd(new Decoration(price, s[2]));
-//            }
-//        });
-//    }
+    public static void createStock(FlowerShop myShop){
+        List<String[]> fileData = readFilePath();
+        fileData.forEach(s -> {
+            String type = s[0];
+            String name = s[1];
+            float price = Float.parseFloat(s[2]);
+            int quantity = Integer.parseInt(s[4]);
+            if (type.equalsIgnoreCase(TYPE_FLOWER)) {
+                String colour = s[3];
+                myShop.addProduct(new Flower(name,price,colour,quantity));
+            }
+            else if(type.equalsIgnoreCase(TYPE_TREE)){
+                float height = Float.parseFloat(s[3]);
+                myShop.addProduct(new Tree(name,price,height,quantity));
+            }
+            else{
+                Decoration.Material material = Enum.valueOf(Decoration.Material.class, s[3]);
+                myShop.addProduct(new Decoration(name,price,material,quantity));
+            }
+        });
+    }
 }
