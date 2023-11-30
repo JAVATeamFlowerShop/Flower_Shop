@@ -3,8 +3,7 @@ package n1exercici1;
 public class Main {
     private static FlowerShop myShop;
     static {
-        myShop = createFlowerShop();
-        LoadInitialData.createStock(myShop);
+        createFlowerShop();
     }
     public static void main(String[] args) {
         loop();
@@ -44,13 +43,10 @@ public class Main {
                 "Choose an option: ");
     }
 
-    private static FlowerShop createFlowerShop(){
+    private static void createFlowerShop(){
         System.out.println("Welcome to the management app for your flower shop!\n");
-        return FlowerShop.createFlowerShop();
+        myShop = FlowerShop.createFlowerShop();
+        LoadInitialData.createStock(myShop);
     }
-
-
-
-
 
 }
