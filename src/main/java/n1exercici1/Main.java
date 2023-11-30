@@ -5,7 +5,9 @@ public class Main {
     static {
         createFlowerShop();
     }
+
     public static void main(String[] args) {
+        System.out.println("Welcome!");
         loop();
     }
 
@@ -44,7 +46,7 @@ public class Main {
     }
 
     private static void createFlowerShop(){
-        System.out.println("Welcome to the management app for your flower shop!\n");
+        System.out.println("\nLet's create your flower shop!");
         myShop = FlowerShop.createFlowerShop();
         LoadInitialData.createStock(myShop);
     }

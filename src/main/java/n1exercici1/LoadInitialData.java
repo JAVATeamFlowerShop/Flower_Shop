@@ -46,5 +46,6 @@ public class LoadInitialData {
                 myShop.addProduct(new Decoration(name,price,material,quantity));
             }
         });
+        System.out.println("Shop initial stock added!\n");
     }
 }
