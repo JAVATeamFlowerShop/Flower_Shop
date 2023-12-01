@@ -131,6 +131,14 @@ public class FlowerShop {
 
     }
 
+    public void showStockQuantities(){
+        System.out.println("STOCK WITH QUANTITIES:\nTrees: ");
+        this.getStock().stream().filter(product -> product instanceof Tree).forEach(System.out::println);
+        System.out.println("\nFlowers:");
+        this.getStock().stream().filter(product -> product instanceof Flower).forEach(System.out::println);
+        System.out.println("\nDecoration:");
+        this.getStock().stream().filter(product -> product instanceof Decoration).forEach(System.out::println);
+    }
     public void showShopValue(){
         String stockValue = String.format("%.2f", this.calcValue());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
