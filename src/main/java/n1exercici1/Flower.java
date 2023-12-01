@@ -14,6 +14,10 @@ public class Flower extends Product{
         return colour;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString(){
         return "Flower {" +
@@ -22,5 +26,11 @@ public class Flower extends Product{
                 "\nprice: " + super.getPrice() +
                 "\nquantity: " + super.getQuantity();
 
+    }
+
+    @Override
+    public boolean equals(Product p) {
+        Flower f = (Flower) p;
+        return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
 }
