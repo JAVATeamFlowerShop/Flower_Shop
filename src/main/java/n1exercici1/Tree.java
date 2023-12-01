@@ -14,7 +14,7 @@ public class Tree extends Product{
     public float getHeight() {
         return height;
     }
-
+  
     @Override
     public String showStock() {
         return "\t{name: " + super.getName() +
@@ -23,6 +23,9 @@ public class Tree extends Product{
     }
 
     @Override
+    public int getId() {
+        return id;
+    }
     public String toString(){
         return "\t{name: " + super.getName() +
                 "\n\theight: " + getHeight() +
@@ -30,4 +33,9 @@ public class Tree extends Product{
                 "\n\tquantity: " + super.getQuantity() + "}\n";
 
     }
+
+    @Override
+    public boolean equals(Product p) {
+        Tree t = (Tree) p;
+        return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();    }
 }
