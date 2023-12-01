@@ -5,8 +5,8 @@ public class Flower extends Product{
     private final String colour;
     private final int id;
     private static final Product.Type type = Enum.valueOf(Product.Type.class, "FLOWER");
-    public Flower(String name, float price, String colour, int quantity) {
-        super(name, price, quantity);
+    public Flower(String name, float price, String colour) {
+        super(name, price);
         this.colour = colour;
         this.id = Product.idProd;
     }
@@ -34,8 +34,7 @@ public class Flower extends Product{
     public String toString(){
         return "\t{name: " + super.getName() +
                 "\n\tcolour: " + getColour() +
-                "\n\tprice: " + super.getPrice() +
-                "\n\tquantity: " + super.getQuantity() + "}\n";
+                "\n\tprice: " + super.getPrice() + "}\n";
 
     }
 

@@ -6,8 +6,8 @@ public class Tree extends Product{
     private final int id;
     private static final Product.Type type = Enum.valueOf(Product.Type.class, "TREE");
 
-    public Tree(String name, float price, float height, int quantity) {
-        super(name, price, quantity);
+    public Tree(String name, float price, float height) {
+        super(name, price);
         this.height = height;
         this.id = Product.idProd;
     }
@@ -34,8 +34,7 @@ public class Tree extends Product{
     public String toString(){
         return "\t{name: " + super.getName() +
                 "\n\theight: " + getHeight() +
-                "\n\tprice: " + super.getPrice() +
-                "\n\tquantity: " + super.getQuantity() + "}\n";
+                "\n\tprice: " + super.getPrice() + "}\n";
 
     }
 

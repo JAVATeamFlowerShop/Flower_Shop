@@ -7,8 +7,8 @@ public class Decoration extends Product{
 
     private final int id;
 
-    public Decoration(String name, float price, Material material, int quantity) {
-        super(name, price, quantity);
+    public Decoration(String name, float price, Material material) {
+        super(name, price);
         this.material = material;
         this.id = Product.idProd;
     }
@@ -42,8 +42,7 @@ public class Decoration extends Product{
     public String toString(){
         return "\t{name: " + super.getName() +
                 "\n\tmaterial: " + getMaterial() +
-                "\n\tprice: " + super.getPrice() +
-                "\n\tquantity: " + super.getQuantity() + "}\n";
+                "\n\tprice: " + super.getPrice() + "}\n";
 
     }
 }

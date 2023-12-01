@@ -5,30 +5,35 @@ import java.util.*;
 public class FlowerShop {
 
     private String name;
-    private static List<Product> stock;
+    private static Map<Product, Integer> stock;
     private float stockValue;
     private List<Ticket> ticketHistory;
 
     public FlowerShop(String name) {
         this.name = name;
-        stock = new ArrayList<Product>();
-        this.stockValue = calcValue();
+        stock = new HashMap<Product, Integer>();
         this.ticketHistory = new ArrayList<Ticket>();
     }
     public String getName() {
         return name;
     }
 
-    public List<Product> getStock() {
+    public Map<Product,Integer> getStock() {
         return stock;
     }
 
-    private float calcValue(){
-        if (stock.isEmpty()){
+    public void setStockValue(float stockValue) {
+        this.stockValue = stockValue;
+    }
+    private float calcValue(Map<Product, Integer> productQuantityMap){
+        if (productQuantityMap.isEmpty()){
             return 0f;
         } else {
-            return (float) stock.stream().mapToDouble(prod -> prod.getPrice() * prod.getQuantity()).sum();
+            return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
         }
+    }
+    public float calcValueStore(){
+        return calcValue(stock);
     }
 
     public static FlowerShop createFlowerShop(){
@@ -42,16 +47,16 @@ public class FlowerShop {
             }
         }
     }
-    public void addProduct(Product product){
-        if(stock.stream().anyMatch(p-> p.getType() == product.getType() && p.equals(product))){
+    public void addProduct(Product product, int quantity){
+        if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
             System.out.println("Product already in stock, quantity will be added");
-            stock.stream()
-                    .filter(p-> p.getType() == product.getType() && p.equals(product))
-                    .forEach(p-> p.increaseQuantity(product.getQuantity()));
+            stock.entrySet().stream()
+                    .filter(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))
+                    .forEach(e-> e.setValue(e.getValue() + quantity));
         }
         else {
             System.out.println("Product added to stock");
-            stock.add(product);
+            stock.put(product, quantity);
         }
     }
     public void addProductUser() throws IllegalArgumentException
@@ -63,29 +68,24 @@ public class FlowerShop {
         int quantity = Readers.readInt("Introduce its quantity");
         String name = Readers.readString("Introduce its name");
         float price = Readers.readFloat("Introduce its price");
-        switch(type)
-        {
-            case 1:
+        switch (type) {
+            case 1 -> {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                Decoration decoration = new Decoration(name,price, material, quantity);
-                stock.add(decoration);
-                break;
-
-            case 2:
+                Decoration decoration = new Decoration(name, price, material);
+                addProduct(decoration, quantity);
+            }
+            case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
-                Flower flower = new Flower(name,price, colour, quantity);
-                stock.add(flower);
-                break;
-
-            case 3:
+                Flower flower = new Flower(name, price, colour);
+                addProduct(flower, quantity);
+            }
+            case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
-                Tree tree = new Tree(name, price, height, quantity);
-                stock.add(tree);
-                break;
-
-            default:
-                System.out.println("This option is not valid");
+                Tree tree = new Tree(name, price, height);
+                addProduct(tree, quantity);
+            }
+            default -> System.out.println("This option is not valid");
         }
     }
 
@@ -97,15 +97,11 @@ public class FlowerShop {
         if(product != null) {
              int quantity = Readers.readInt("What quantity?");
 
-             if (product.getQuantity() > quantity) {
-                int productIndex = stock.indexOf(product);
-                stock.get(productIndex).decreaseQuantity(quantity);
+             if (stock.get(product) >= quantity) {
+                int newQuantity = stock.get(product) - quantity;
+                stock.replace(product, newQuantity);
              } else {
-                if (product.getQuantity() == quantity) {
-                    stock.remove(product);
-                } else {
-                    System.out.println("There is not enough quantity of this product");
-                }
+                 System.out.println("There is not enough quantity of this product");
              }
         }
         else {
@@ -113,34 +109,33 @@ public class FlowerShop {
         }
     }
 
-    private Product findProduct(String name)
-    {
-        Optional<Product> product = stock.stream()
-                .filter(item -> item.getName().equals(name))
+    private Product findProduct(String name){
+        Optional<Product> product = stock.keySet().stream()
+                .filter(prod -> prod.getName().equals(name))
                 .findFirst();
 
         return product.get();
     }
-    public void showAllStock(){
-        System.out.println("STOCK:\nTrees: ");
-        this.getStock().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
-        System.out.println("\nFlowers:");
-        this.getStock().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
-        System.out.println("\nDecoration:");
-        this.getStock().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
 
+    public void showAllStock() {
+        System.out.println("STOCK:\nTrees: ");
+        this.getStock().keySet().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nFlowers:");
+        this.getStock().keySet().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nDecoration:");
+        this.getStock().keySet().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
     }
 
     public void showStockQuantities(){
         System.out.println("STOCK WITH QUANTITIES:\nTrees: ");
-        this.getStock().stream().filter(product -> product instanceof Tree).forEach(System.out::println);
+        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
         System.out.println("\nFlowers:");
-        this.getStock().stream().filter(product -> product instanceof Flower).forEach(System.out::println);
+        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
         System.out.println("\nDecoration:");
-        this.getStock().stream().filter(product -> product instanceof Decoration).forEach(System.out::println);
+        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
     }
     public void showShopValue(){
-        String stockValue = String.format("%.2f", this.calcValue());
+        String stockValue = String.format("%.2f", this.calcValueStore());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
     }
 }
