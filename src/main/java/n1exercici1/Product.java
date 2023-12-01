@@ -5,6 +5,7 @@ public abstract class Product {
     protected int quantity;
     protected final String name;
     protected static int idProd;
+    protected enum Type {FLOWER,TREE,DECORATION};
 
     public Product(String name, float price, int quantity)
     {
@@ -43,4 +44,5 @@ public abstract class Product {
 
     public abstract String showStock();
     public abstract boolean equals(Product p);
+    public abstract Product.Type getType();
 }
