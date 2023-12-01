@@ -18,7 +18,7 @@ public class Main {
                 case 1 -> myShop.addProductUser();
                 case 2 -> myShop.removeProduct();
                 case 3 -> myShop.showAllStock();
-//                case 4 -> showStockQuantities();
+//                case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
 //                case 6 -> createPurchaseReceipt();
 //                case 7 -> showPreviousPurchases();

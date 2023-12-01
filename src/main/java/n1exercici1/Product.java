@@ -41,6 +41,8 @@ public abstract class Product {
     {
         this.quantity += quantity;
     }
+
+    public abstract String showStock();
     public boolean equals(Product p){
         return p.getName().equalsIgnoreCase(this.name) && p.getPrice() == this.price;
     }
