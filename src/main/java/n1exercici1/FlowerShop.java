@@ -119,23 +119,49 @@ public class FlowerShop {
 
     public void showAllStock() {
         System.out.println("STOCK:\nTrees: ");
-        this.getStock().keySet().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
         System.out.println("\nFlowers:");
-        this.getStock().keySet().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
         System.out.println("\nDecoration:");
-        this.getStock().keySet().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
     }
 
     public void showStockQuantities(){
         System.out.println("STOCK WITH QUANTITIES:\nTrees: ");
-        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
         System.out.println("\nFlowers:");
-        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
         System.out.println("\nDecoration:");
-        this.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.println(e.getKey() + "\tQUANTITY = " + e.getValue()));
     }
     public void showShopValue(){
         String stockValue = String.format("%.2f", this.calcValueStore());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
+    }
+    private Product findProductById(int id){
+        Product myProduct = stock.keySet().stream()
+                .filter(product -> product.getId() == id)
+                .findAny()
+                .orElse(null);
+        if (myProduct == null){
+            //TODO
+            //throw exception para evitar nullpointer exception
+            System.out.println("Item not found");
+        }
+        return myProduct;
+    }
+    public void createPurchaseReceipt(){
+        System.out.println("Let's create the purchase ticket");
+        Ticket ticket = new Ticket();
+        System.out.println("Which products is the client buying?");
+        showAllStock();
+        boolean isFinished= false;
+        while (!isFinished){
+            int idProd = Readers.readInt("Please input product id");
+            int quantity = Readers.readInt("How many?");
+            ticket.addProductTicket(findProductById(idProd), quantity);
+            isFinished = !Readers.readYesNo("Anything else?");
+        }
+        System.out.println(ticket);
     }
 }

@@ -19,6 +19,10 @@ public class Tree extends Product{
     public Product.Type getType(){
         return type;
     }
+    @Override
+    public int getId() {
+        return id;
+    }
   
     @Override
     public String showStock() {
@@ -28,18 +32,15 @@ public class Tree extends Product{
     }
 
     @Override
-    public int getId() {
-        return id;
-    }
-    public String toString(){
-        return "\t{name: " + super.getName() +
-                "\n\theight: " + getHeight() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-
-    }
-
-    @Override
     public boolean equals(Product p) {
         Tree t = (Tree) p;
-        return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();    }
+        return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();
+    }
+    @Override
+    public String toString(){
+        return "\t{ID: " + getId()+
+                "\n\tname: " + super.getName() +
+                "\n\theight: " + getHeight() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+    }
 }

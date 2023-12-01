@@ -26,8 +26,9 @@ public class Decoration extends Product{
     }
 
     @Override
-    public String showStock() {
-        return "\t{name: " + super.getName() +
+    public String showStock(){
+        return "\t{ID: " + getId()+
+                "\n\tname: " + super.getName() +
                 "\n\tmaterial: " + getMaterial() +
                 "\n\tprice: " + super.getPrice() + "}\n";
     }
@@ -39,10 +40,9 @@ public class Decoration extends Product{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "\t{name: " + super.getName() +
                 "\n\tmaterial: " + getMaterial() +
                 "\n\tprice: " + super.getPrice() + "}\n";
-
     }
 }

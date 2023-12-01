@@ -23,19 +23,13 @@ public class Flower extends Product{
         return type;
     }
 
-    @Override
-    public String showStock() {
-        return "\t{name: " + super.getName() +
-                "\n\tcolour: " + getColour() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-    }
 
     @Override
-    public String toString(){
-        return "\t{name: " + super.getName() +
+    public String showStock(){
+        return "\t{ID: " + getId()+
+                "\n\tname: " + super.getName() +
                 "\n\tcolour: " + getColour() +
                 "\n\tprice: " + super.getPrice() + "}\n";
-
     }
 
     @Override
@@ -44,4 +38,10 @@ public class Flower extends Product{
         return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
 
+    @Override
+    public String toString() {
+        return "\t{name: " + super.getName() +
+                "\n\tcolour: " + getColour() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+    }
 }
