@@ -43,10 +43,10 @@ public class FlowerShop {
         }
     }
     public void addProduct(Product product){
-        if(stock.stream().anyMatch(p-> p.equals(product))){
+        if(stock.stream().anyMatch(p-> p.getType() == product.getType() && p.equals(product))){
             System.out.println("Product already in stock, quantity will be added");
             stock.stream()
-                    .filter(p-> p.equals(product))
+                    .filter(p-> p.getType() == product.getType() && p.equals(product))
                     .forEach(p-> p.increaseQuantity(product.getQuantity()));
         }
         else {

@@ -4,6 +4,7 @@ public class Flower extends Product{
 
     private final String colour;
     private final int id;
+    private static final Product.Type type = Enum.valueOf(Product.Type.class, "FLOWER");
     public Flower(String name, float price, String colour, int quantity) {
         super(name, price, quantity);
         this.colour = colour;
@@ -16,6 +17,10 @@ public class Flower extends Product{
 
     public int getId() {
         return id;
+    }
+    @Override
+    public Product.Type getType(){
+        return type;
     }
 
     @Override
