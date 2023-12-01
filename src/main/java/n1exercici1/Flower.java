@@ -19,12 +19,18 @@ public class Flower extends Product{
     }
 
     @Override
+    public String showStock() {
+        return "\t{name: " + super.getName() +
+                "\n\tcolour: " + getColour() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+    }
+
+    @Override
     public String toString(){
-        return "Flower {" +
-                "\nname: " + super.getName() +
-                "\ncolour: " + getColour() +
-                "\nprice: " + super.getPrice() +
-                "\nquantity: " + super.getQuantity();
+        return "\t{name: " + super.getName() +
+                "\n\tcolour: " + getColour() +
+                "\n\tprice: " + super.getPrice() +
+                "\n\tquantity: " + super.getQuantity() + "}\n";
 
     }
 
@@ -33,4 +39,5 @@ public class Flower extends Product{
         Flower f = (Flower) p;
         return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
+
 }

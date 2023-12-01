@@ -40,5 +40,7 @@ public abstract class Product {
     {
         this.quantity += quantity;
     }
+
+    public abstract String showStock();
     public abstract boolean equals(Product p);
 }

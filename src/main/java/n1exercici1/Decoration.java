@@ -1,7 +1,5 @@
 package n1exercici1;
 
-public class Decoration extends Product{
-
 
     public enum Material {WOOD, PLASTIC}
     private Material material;
@@ -24,6 +22,12 @@ public class Decoration extends Product{
     }
 
     @Override
+    public String showStock() {
+        return "\t{name: " + super.getName() +
+                "\n\tmaterial: " + getMaterial() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+
+    @Override
     public boolean equals(Product p) {
         Decoration d = (Decoration) p;
         return this.name.equalsIgnoreCase(d.getName()) && this.price == d.getPrice() && this.material == d.getMaterial();
@@ -31,11 +35,10 @@ public class Decoration extends Product{
 
     @Override
     public String toString(){
-        return "Decoration {" +
-                "\nname: " + super.getName() +
-                "\nmaterial: " + getMaterial() +
-                "\nprice: " + super.getPrice() +
-                "\nquantity: " + super.getQuantity();
+        return "\t{name: " + super.getName() +
+                "\n\tmaterial: " + getMaterial() +
+                "\n\tprice: " + super.getPrice() +
+                "\n\tquantity: " + super.getQuantity() + "}\n";
 
     }
 }

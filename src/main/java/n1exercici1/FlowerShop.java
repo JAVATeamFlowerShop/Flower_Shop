@@ -122,8 +122,15 @@ public class FlowerShop {
         return product.get();
     }
     public void showAllStock(){
-        this.getStock().forEach(product -> System.out.println(product + "\n"));
+        System.out.println("STOCK:\nTrees: ");
+        this.getStock().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nFlowers:");
+        this.getStock().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nDecoration:");
+        this.getStock().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
+
     }
+
     public void showShopValue(){
         String stockValue = String.format("%.2f", this.calcValue());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
