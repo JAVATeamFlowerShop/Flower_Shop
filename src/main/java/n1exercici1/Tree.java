@@ -15,6 +15,10 @@ public class Tree extends Product{
         return height;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String toString(){
         return "Tree {" +
                 "\nname: " + super.getName() +
@@ -23,4 +27,9 @@ public class Tree extends Product{
                 "\nquantity: " + super.getQuantity();
 
     }
+
+    @Override
+    public boolean equals(Product p) {
+        Tree t = (Tree) p;
+        return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();    }
 }

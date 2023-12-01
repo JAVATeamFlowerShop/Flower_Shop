@@ -1,8 +1,6 @@
 package n1exercici1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FlowerShop {
 
@@ -55,7 +53,6 @@ public class FlowerShop {
             System.out.println("Product added to stock");
             stock.add(product);
         }
-
     }
     public void addProductUser() throws IllegalArgumentException
     {
@@ -123,7 +120,6 @@ public class FlowerShop {
                 .findFirst();
 
         return product.get();
-
     }
     public void showAllStock(){
         this.getStock().forEach(product -> System.out.println(product + "\n"));
@@ -132,6 +128,4 @@ public class FlowerShop {
         String stockValue = String.format("%.2f", this.calcValue());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
     }
-
-
 }
