@@ -1,6 +1,6 @@
 package n1exercici1;
 
-
+public class Decoration extends Product{
     public enum Material {WOOD, PLASTIC}
     private Material material;
     private final int id;
@@ -10,7 +10,6 @@ package n1exercici1;
         this.material = material;
         this.id = Product.idProd;
     }
-
 
     @Override
     public int getId() {
@@ -26,6 +25,7 @@ package n1exercici1;
         return "\t{name: " + super.getName() +
                 "\n\tmaterial: " + getMaterial() +
                 "\n\tprice: " + super.getPrice() + "}\n";
+    }
 
     @Override
     public boolean equals(Product p) {
