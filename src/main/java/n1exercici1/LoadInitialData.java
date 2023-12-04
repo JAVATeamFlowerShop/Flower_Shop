@@ -35,17 +35,18 @@ public class LoadInitialData {
             int quantity = Integer.parseInt(s[4]);
             if (type.equalsIgnoreCase(TYPE_FLOWER)) {
                 String colour = s[3];
-                myShop.addProduct(new Flower(name,price,colour,quantity));
+                myShop.addProduct(new Flower(name,price,colour), quantity);
             }
             else if(type.equalsIgnoreCase(TYPE_TREE)){
                 float height = Float.parseFloat(s[3]);
-                myShop.addProduct(new Tree(name,price,height,quantity));
+                myShop.addProduct(new Tree(name,price,height), quantity);
             }
             else{
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, s[3]);
-                myShop.addProduct(new Decoration(name,price,material,quantity));
+                myShop.addProduct(new Decoration(name,price,material), quantity);
             }
         });
         System.out.println("Shop initial stock added!\n");
+        myShop.setStockValue(myShop.calcValueStore());
     }
 }

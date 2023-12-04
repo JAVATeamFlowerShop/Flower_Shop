@@ -5,8 +5,8 @@ public class Flower extends Product{
     private final String colour;
     private final int id;
     private static final Product.Type type = Enum.valueOf(Product.Type.class, "FLOWER");
-    public Flower(String name, float price, String colour, int quantity) {
-        super(name, price, quantity);
+    public Flower(String name, float price, String colour) {
+        super(name, price);
         this.colour = colour;
         this.id = Product.idProd;
     }
@@ -23,20 +23,10 @@ public class Flower extends Product{
         return type;
     }
 
-    @Override
-    public String showStock() {
-        return "\t{name: " + super.getName() +
-                "\n\tcolour: " + getColour() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-    }
 
     @Override
-    public String toString(){
-        return "\t{name: " + super.getName() +
-                "\n\tcolour: " + getColour() +
-                "\n\tprice: " + super.getPrice() +
-                "\n\tquantity: " + super.getQuantity() + "}\n";
-
+    public String showStock(){
+        return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
     }
 
     @Override
@@ -45,4 +35,10 @@ public class Flower extends Product{
         return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
 
+    @Override
+    public String toString() {
+        return "\t{name: " + super.getName() +
+                "\n\tcolour: " + getColour() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+    }
 }

@@ -20,7 +20,7 @@ public class Main {
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
-//                case 6 -> createPurchaseReceipt();
+                case 6 -> myShop.createPurchaseReceipt();
 //                case 7 -> showPreviousPurchases();
 //                case 8 -> showTotalSalesIncome();
                 case 0 -> {

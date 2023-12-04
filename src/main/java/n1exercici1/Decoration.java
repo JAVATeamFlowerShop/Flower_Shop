@@ -7,8 +7,8 @@ public class Decoration extends Product{
 
     private final int id;
 
-    public Decoration(String name, float price, Material material, int quantity) {
-        super(name, price, quantity);
+    public Decoration(String name, float price, Material material) {
+        super(name, price);
         this.material = material;
         this.id = Product.idProd;
     }
@@ -26,10 +26,8 @@ public class Decoration extends Product{
     }
 
     @Override
-    public String showStock() {
-        return "\t{name: " + super.getName() +
-                "\n\tmaterial: " + getMaterial() +
-                "\n\tprice: " + super.getPrice() + "}\n";
+    public String showStock(){
+        return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
     }
 
     @Override
@@ -39,11 +37,9 @@ public class Decoration extends Product{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "\t{name: " + super.getName() +
                 "\n\tmaterial: " + getMaterial() +
-                "\n\tprice: " + super.getPrice() +
-                "\n\tquantity: " + super.getQuantity() + "}\n";
-
+                "\n\tprice: " + super.getPrice() + "}\n";
     }
 }
