@@ -9,7 +9,9 @@ public class FlowerShop {
     private float stockValue;
     private List<Ticket> ticketHistory;
 
-    public FlowerShop(String name) {
+    private static FlowerShop instance;
+
+    private FlowerShop(String name) {
         this.name = name;
         stock = new HashMap<Product, Integer>();
         this.ticketHistory = new ArrayList<Ticket>();
@@ -37,15 +39,22 @@ public class FlowerShop {
     }
 
     public static FlowerShop createFlowerShop(){
-        String shopName = Readers.readString("Introduce the flower shop name: ");
-        while (true){
-            System.out.printf("Name: " + shopName);
-            if (Readers.readYesNo("\nIs that correct?(y/n)")){
-                return new FlowerShop(shopName);
-            } else {
-                shopName = Readers.readString("Introduce the name again: ");
+
+        if(instance == null) {
+
+            String shopName = Readers.readString("Introduce the flower shop name: ");
+            while (true) {
+                System.out.printf("Name: " + shopName);
+                if (Readers.readYesNo("\nIs that correct?(y/n)")) {
+                    instance = new FlowerShop(shopName);
+                    return instance;
+                } else {
+                    shopName = Readers.readString("Introduce the name again: ");
+                }
             }
         }
+
+        return instance;
     }
     public void addProduct(Product product, int quantity){
         if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
@@ -61,32 +70,39 @@ public class FlowerShop {
     }
     public void addProductUser() throws IllegalArgumentException
     {
-        int type = Readers.readInt("Introduce the product type\n " +
+        int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
-                "2. Flower\n " +
+                "2. Flower\n" +
                 "3. Tree");
-        int quantity = Readers.readInt("Introduce its quantity");
         String name = Readers.readString("Introduce its name");
+        int quantity = Readers.readInt("Introduce its quantity");
         float price = Readers.readFloat("Introduce its price");
-        switch (type) {
-            case 1 -> {
+
+        Product product = null;
+
+        switch(type)
+        {
+            case 1:
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                Decoration decoration = new Decoration(name, price, material);
-                addProduct(decoration, quantity);
-            }
-            case 2 -> {
+                product = new Decoration(name,price, material);
+            break;
+
+            case 2:
                 String colour = Readers.readString("Introduce its colour");
-                Flower flower = new Flower(name, price, colour);
-                addProduct(flower, quantity);
-            }
-            case 3 -> {
+                product = new Flower(name,price, colour);
+                break;
+
+            case 3 :
                 float height = Readers.readFloat("Introduce its height");
-                Tree tree = new Tree(name, price, height);
-                addProduct(tree, quantity);
-            }
-            default -> System.out.println("This option is not valid");
+                product = new Tree(name, price, height);
+                break;
+
+            default:
+                System.out.println("This option is not valid");
         }
+
+        addProduct(product, quantity);
     }
 
     public void removeProduct()
