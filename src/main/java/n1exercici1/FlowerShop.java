@@ -1,8 +1,6 @@
 package n1exercici1;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FlowerShop {
 
@@ -55,17 +53,16 @@ public class FlowerShop {
         return instance;
     }
     public void addProduct(Product product){
-        if(stock.stream().anyMatch(p-> p.equals(product))){
+        if(stock.stream().anyMatch(p-> p.getType() == product.getType() && p.equals(product))){
             System.out.println("Product already in stock, quantity will be added");
             stock.stream()
-                    .filter(p-> p.equals(product))
+                    .filter(p-> p.getType() == product.getType() && p.equals(product))
                     .forEach(p-> p.increaseQuantity(product.getQuantity()));
         }
         else {
             System.out.println("Product added to stock");
             stock.add(product);
         }
-
     }
     public void addProductUser() throws IllegalArgumentException
     {
@@ -139,15 +136,27 @@ public class FlowerShop {
                 .findFirst();
 
         return product.get();
-
     }
     public void showAllStock(){
-        this.getStock().forEach(product -> System.out.println(product + "\n"));
+        System.out.println("STOCK:\nTrees: ");
+        this.getStock().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nFlowers:");
+        this.getStock().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
+        System.out.println("\nDecoration:");
+        this.getStock().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
+
+    }
+
+    public void showStockQuantities(){
+        System.out.println("STOCK WITH QUANTITIES:\nTrees: ");
+        this.getStock().stream().filter(product -> product instanceof Tree).forEach(System.out::println);
+        System.out.println("\nFlowers:");
+        this.getStock().stream().filter(product -> product instanceof Flower).forEach(System.out::println);
+        System.out.println("\nDecoration:");
+        this.getStock().stream().filter(product -> product instanceof Decoration).forEach(System.out::println);
     }
     public void showShopValue(){
         String stockValue = String.format("%.2f", this.calcValue());
         System.out.printf("Shop's stock value is: %s eur\n", stockValue);
     }
-
-
 }

@@ -5,7 +5,9 @@ public class Main {
     static {
         createFlowerShop();
     }
+
     public static void main(String[] args) {
+        System.out.println("Welcome!");
         loop();
     }
 
@@ -16,7 +18,7 @@ public class Main {
                 case 1 -> myShop.addProductUser();
                 case 2 -> myShop.removeProduct();
                 case 3 -> myShop.showAllStock();
-//                case 4 -> showStockQuantities();
+                case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
 //                case 6 -> createPurchaseReceipt();
 //                case 7 -> showPreviousPurchases();
@@ -44,7 +46,7 @@ public class Main {
     }
 
     private static void createFlowerShop(){
-        System.out.println("Welcome to the management app for your flower shop!\n");
+        System.out.println("\nLet's create your flower shop!");
         myShop = FlowerShop.createFlowerShop();
         LoadInitialData.createStock(myShop);
     }

@@ -4,6 +4,7 @@ public class Tree extends Product{
 
     private final float height;
     private final int id;
+    private static final Product.Type type = Enum.valueOf(Product.Type.class, "TREE");
 
     public Tree(String name, float price, float height, int quantity) {
         super(name, price, quantity);
@@ -14,13 +15,32 @@ public class Tree extends Product{
     public float getHeight() {
         return height;
     }
+    @Override
+    public Product.Type getType(){
+        return type;
+    }
+  
+    @Override
+    public String showStock() {
+        return "\t{name: " + super.getName() +
+                "\n\theight: " + getHeight() +
+                "\n\tprice: " + super.getPrice() + "}\n";
+    }
 
+    @Override
+    public int getId() {
+        return id;
+    }
     public String toString(){
-        return "Tree {" +
-                "\nname: " + super.getName() +
-                "\nheight: " + getHeight() +
-                "\nprice: " + super.getPrice() +
-                "\nquantity: " + super.getQuantity();
+        return "\t{name: " + super.getName() +
+                "\n\theight: " + getHeight() +
+                "\n\tprice: " + super.getPrice() +
+                "\n\tquantity: " + super.getQuantity() + "}\n";
 
     }
+
+    @Override
+    public boolean equals(Product p) {
+        Tree t = (Tree) p;
+        return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();    }
 }

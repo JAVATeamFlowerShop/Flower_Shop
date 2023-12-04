@@ -1,12 +1,11 @@
 package n1exercici1;
 
-import java.util.Comparator;
-
 public abstract class Product {
-    private final float price;
-    private int quantity;
-    private final String name;
+    protected final float price;
+    protected int quantity;
+    protected final String name;
     protected static int idProd;
+    protected enum Type {FLOWER,TREE,DECORATION};
 
     public Product(String name, float price, int quantity)
     {
@@ -20,9 +19,10 @@ public abstract class Product {
         return price;
     }
 
-    public static int getId() {
+    public static int getIdProd() {
         return idProd;
     }
+    public abstract int getId();
 
     public String getName() {
         return name;
@@ -41,7 +41,8 @@ public abstract class Product {
     {
         this.quantity += quantity;
     }
-    public boolean equals(Product p){
-        return p.getName().equalsIgnoreCase(this.name) && p.getPrice() == this.price;
-    }
+
+    public abstract String showStock();
+    public abstract boolean equals(Product p);
+    public abstract Product.Type getType();
 }
