@@ -27,10 +27,7 @@ public class Decoration extends Product{
 
     @Override
     public String showStock(){
-        return "\t{ID: " + getId()+
-                "\n\tname: " + super.getName() +
-                "\n\tmaterial: " + getMaterial() +
-                "\n\tprice: " + super.getPrice() + "}\n";
+        return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
     }
 
     @Override

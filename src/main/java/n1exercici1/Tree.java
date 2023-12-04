@@ -23,12 +23,10 @@ public class Tree extends Product{
     public int getId() {
         return id;
     }
-  
+
     @Override
-    public String showStock() {
-        return "\t{name: " + super.getName() +
-                "\n\theight: " + getHeight() +
-                "\n\tprice: " + super.getPrice() + "}\n";
+    public String showStock(){
+        return String.format("\t\t%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
     }
 
     @Override
@@ -36,10 +34,10 @@ public class Tree extends Product{
         Tree t = (Tree) p;
         return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();
     }
+
     @Override
-    public String toString(){
-        return "\t{ID: " + getId()+
-                "\n\tname: " + super.getName() +
+    public String toString() {
+        return "\t{name: " + super.getName() +
                 "\n\theight: " + getHeight() +
                 "\n\tprice: " + super.getPrice() + "}\n";
     }
