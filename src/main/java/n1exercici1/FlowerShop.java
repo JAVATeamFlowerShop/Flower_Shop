@@ -7,7 +7,7 @@ public class FlowerShop {
     private String name;
     private static Map<Product, Integer> stock;
     private float stockValue;
-    private List<Ticket> ticketHistory;
+    private TicketHistory ticketHistory;
 
     private static FlowerShop instance;
     private StockManager stockManager;
@@ -15,11 +15,14 @@ public class FlowerShop {
     private FlowerShop(String name) {
         this.name = name;
         stock = new HashMap<Product, Integer>();
-        this.ticketHistory = new ArrayList<Ticket>();
+        this.ticketHistory = new TicketHistory();
         this.stockManager = new StockManager(this);
     }
     public String getName() {
         return name;
+    }
+    public StockManager getStockManager(){
+        return stockManager;
     }
 
     public Map<Product,Integer> getStock() {
@@ -70,6 +73,7 @@ public class FlowerShop {
             System.out.println("Product added to stock");
             stock.put(product, quantity);
         }
+        updateStockValue();
     }
     public void addProductUser() throws IllegalArgumentException
     {
@@ -119,6 +123,7 @@ public class FlowerShop {
         else {
             System.out.println("This product is not found in the stock");
         }
+        updateStockValue();
     }
 
     public void removeProduct()
@@ -155,19 +160,19 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "HEIGHT", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Tree).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Tree).forEach((System.out::println));
         System.out.println();
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "COLOUR", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Flower).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Flower).forEach((System.out::println));
         System.out.println();
         System.out.println("\tDECORATION");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "MATERIAL", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach((product -> System.out.println(product.showStock())));
+        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach((System.out::println));
     }
 
     public void showStockQuantities(){
@@ -176,21 +181,20 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.printf("%s %8d\n",e.getKey().showStock(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.printf("%s %8d\n",e.getKey(), e.getValue()));
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "COLOUR", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.printf("%s %8d\n", e.getKey().showStock(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.printf("%s %8d\n", e.getKey(), e.getValue()));
         System.out.println("\tDECORATION");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("%s %8d\n", e.getKey().showStock(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("%s %8d\n", e.getKey(), e.getValue()));
     }
     public void showShopValue(){
-        String stockValue = String.format("%.2f", this.calcValueStore());
-        System.out.printf("Shop's stock value is: %s eur\n", stockValue);
+        System.out.printf("Shop's stock value is: %.2f eur\n", this.stockValue);
     }
     private Product findProductById(int id){
         Product myProduct = stock.keySet().stream()
@@ -218,16 +222,12 @@ public class FlowerShop {
         }
         System.out.println(ticket);
     }
-    public void updateStock(Product product, int quantity){
-        if(quantity > 0){
-            addProduct(product, quantity);
-        }
-        else if(quantity < 0) {
-            removeProduct(product, -quantity);
-        }
-    }
+
     public void updateStockValue(){
         float value = calcValueStore();
         setStockValue(stockValue);
+    }
+    public void showTotalSalesIncome(){
+        System.out.println(ticketHistory.getTotalSalesAmount() + " eur");
     }
 }

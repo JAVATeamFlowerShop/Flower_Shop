@@ -26,7 +26,7 @@ public class Decoration extends Product{
     }
 
     @Override
-    public String showStock(){
+    public String toString(){
         return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
     }
 
@@ -36,10 +36,4 @@ public class Decoration extends Product{
         return this.name.equalsIgnoreCase(d.getName()) && this.price == d.getPrice() && this.material == d.getMaterial();
     }
 
-    @Override
-    public String toString() {
-        return "\t{name: " + super.getName() +
-                "\n\tmaterial: " + getMaterial() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-    }
 }

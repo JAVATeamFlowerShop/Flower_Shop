@@ -25,7 +25,7 @@ public class Flower extends Product{
 
 
     @Override
-    public String showStock(){
+    public String toString(){
         return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
     }
 
@@ -35,10 +35,4 @@ public class Flower extends Product{
         return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
 
-    @Override
-    public String toString() {
-        return "\t{name: " + super.getName() +
-                "\n\tcolour: " + getColour() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-    }
 }

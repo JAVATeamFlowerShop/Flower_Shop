@@ -26,7 +26,6 @@ public abstract class Product {
         return name;
     }
 
-    public abstract String showStock();
     public abstract boolean equals(Product p);
     public abstract Product.Type getType();
 }
