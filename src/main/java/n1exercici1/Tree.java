@@ -25,7 +25,7 @@ public class Tree extends Product{
     }
 
     @Override
-    public String showStock(){
+    public String toString(){
         return String.format("\t\t%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
     }
 
@@ -35,10 +35,5 @@ public class Tree extends Product{
         return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();
     }
 
-    @Override
-    public String toString() {
-        return "\t{name: " + super.getName() +
-                "\n\theight: " + getHeight() +
-                "\n\tprice: " + super.getPrice() + "}\n";
-    }
+
 }

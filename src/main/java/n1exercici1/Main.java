@@ -22,7 +22,7 @@ public class Main {
                 case 5 -> myShop.showShopValue();
                 case 6 -> myShop.createPurchaseReceipt();
 //                case 7 -> showPreviousPurchases();
-//                case 8 -> showTotalSalesIncome();
+                case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
                     System.out.println("Bye! You exited flower shop management.");
