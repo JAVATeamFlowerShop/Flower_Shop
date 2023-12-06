@@ -27,7 +27,7 @@ public class Decoration extends Product{
 
     @Override
     public String toString(){
-        return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
+        return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
     }
 
     @Override

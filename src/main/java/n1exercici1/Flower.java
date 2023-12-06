@@ -26,7 +26,7 @@ public class Flower extends Product{
 
     @Override
     public String toString(){
-        return String.format("\t\t%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
+        return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
     }
 
     @Override
