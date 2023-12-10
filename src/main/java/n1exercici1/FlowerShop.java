@@ -154,7 +154,7 @@ public class FlowerShop {
         System.out.println("\t\t-----------------------------------");
         stock.keySet().stream().filter(product -> product instanceof Flower).forEach(p -> System.out.println("\t\t" + p));
         System.out.println();
-        System.out.println("\tDECORATION");
+        System.out.println("\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "MATERIAL", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
@@ -162,7 +162,7 @@ public class FlowerShop {
     }
 
     public void showStockQuantities(){
-        System.out.println("STOCK AND QUANTITIES");
+        System.out.println("STOCK WITH QUANTITIES");
         System.out.println("\tTREES");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
         System.out.println();
@@ -173,14 +173,14 @@ public class FlowerShop {
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
         stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
-        System.out.println("\tDECORATION");
+        System.out.println("\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
         stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
     }
     public void showShopValue(){
-        System.out.printf("Shop's stock value is: %.2f eur\n", this.stockValue);
+        System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
     private Product findProductById(int id){
         Product myProduct = stock.keySet().stream()
@@ -197,11 +197,11 @@ public class FlowerShop {
     public void createPurchaseReceipt(){
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
-        System.out.println("Which products is the client buying?");
-        showAllStock();
         boolean isFinished= false;
+
         while (!isFinished){
-            int idProd = Readers.readInt("Please input product id");
+            showStockQuantities();
+            int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
             int quantity = Readers.readInt("How many?");
             Product product = findProductById(idProd);
             ticket.addProductTicket(product, quantity);
@@ -220,6 +220,6 @@ public class FlowerShop {
         System.out.println(ticketHistory);
     }
     public void showTotalSalesIncome(){
-        System.out.printf("%.2f eur\n", ticketHistory.getTotalSalesAmount());
+        System.out.printf("TOTAL SALES INCOME: %.2f€\n", ticketHistory.getTotalSalesAmount());
     }
 }
