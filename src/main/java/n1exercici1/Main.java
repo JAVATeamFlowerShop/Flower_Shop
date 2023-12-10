@@ -16,12 +16,14 @@ public class Main {
         boolean exit = false;
         do{
             switch (menu()){
-                case 1 -> myShop.addProductUser();
+                case 1 -> myShop.addProduct();
                 case 2 -> myShop.removeProduct();
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
-                case 6 -> myShop.createPurchaseReceipt();
+                case 6 -> {try {myShop.createPurchaseReceipt();}
+                    catch (NullPointerException e) {System.err.println(e.getMessage());}
+                }
                 case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
@@ -47,24 +49,7 @@ public class Main {
     }
 
     private static void createFlowerShop(){
-        String shopName = chooseFlowerShopName();
-        myShop = FlowerShop.createFlowerShop(shopName);
-    }
-
-    private static String chooseFlowerShopName(){
-        if(myShop == null) {
-            System.out.println("\nLet's create your flower shop!");
-            String shopName = Readers.readString("Introduce the flower shop name: ");
-            while (true) {
-                System.out.printf("Name: " + shopName);
-                if (Readers.readYesNo("\nIs that correct?(y/n)")) {
-                    return shopName;
-                } else {
-                    shopName = Readers.readString("Introduce the name again: ");
-                }
-            }
-        }
-        return myShop.getName();
+        myShop = FlowerShop.createFlowerShop();
     }
 
     private static void loadInitialData(){
