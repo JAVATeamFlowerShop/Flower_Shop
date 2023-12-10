@@ -47,14 +47,13 @@ public class Main {
     }
 
     private static void createFlowerShop(){
-        System.out.println("\nLet's create your flower shop!");
         String shopName = chooseFlowerShopName();
-
         myShop = FlowerShop.createFlowerShop(shopName);
     }
 
     private static String chooseFlowerShopName(){
         if(myShop == null) {
+            System.out.println("\nLet's create your flower shop!");
             String shopName = Readers.readString("Introduce the flower shop name: ");
             while (true) {
                 System.out.printf("Name: " + shopName);

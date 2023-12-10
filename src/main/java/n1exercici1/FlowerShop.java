@@ -31,7 +31,7 @@ public class FlowerShop {
             instance = new FlowerShop(shopName);
             return instance;
         }
-        System.out.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop!!.\n");
+        System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
         return instance;
     }
 
