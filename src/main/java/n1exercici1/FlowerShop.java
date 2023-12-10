@@ -36,6 +36,15 @@ public class FlowerShop {
         return instance;
     }
 
+    public void updateStockValue(){
+        float value = calcValueStore();
+        setStockValue(value);
+    }
+
+    public float calcValueStore(){
+        return calcValue(stock);
+    }
+
     private float calcValue(Map<Product, Integer> productQuantityMap){
         if (productQuantityMap == null){
             return 0f;
@@ -43,25 +52,8 @@ public class FlowerShop {
             return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
         }
     }
-    public float calcValueStore(){
-        return calcValue(stock);
-    }
 
-    public void addProduct(Product product, int quantity){
-        if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
-            System.out.println("Product already in stock, quantity will be added");
-            stock.entrySet().stream()
-                    .filter(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))
-                    .forEach(e-> e.setValue(e.getValue() + quantity));
-        }
-        else {
-            System.out.println("Product added to stock");
-            stock.put(product, quantity);
-        }
-        updateStockValue();
-    }
-    public void addProduct() throws IllegalArgumentException
-    {
+    public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
                 "2. Flower\n" +
@@ -78,7 +70,7 @@ public class FlowerShop {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name,price, material);
-            break;
+                break;
 
             case 2:
                 String colour = Readers.readString("Introduce its colour");
@@ -93,9 +85,32 @@ public class FlowerShop {
             default:
                 System.out.println("This option is not valid");
         }
-
         addProduct(product, quantity);
     }
+
+    public void addProduct(Product product, int quantity){
+        if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
+            System.out.println("Product already in stock, quantity will be added");
+            stock.entrySet().stream()
+                    .filter(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))
+                    .forEach(e-> e.setValue(e.getValue() + quantity));
+        }
+        else {
+            System.out.println("Product added to stock");
+            stock.put(product, quantity);
+        }
+        updateStockValue();
+    }
+
+    public void removeProduct(){
+        showStockQuantities();
+        int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
+        Product product = findProductById(idProd);
+        int quantity = Readers.readInt("How many?");
+
+        removeProduct(product, quantity);
+    }
+
     public void removeProduct(Product product, int quantity){
         if(product != null) {
             if (stock.get(product) >= quantity) {
@@ -109,15 +124,6 @@ public class FlowerShop {
             System.out.println("This product is not found in the stock");
         }
         updateStockValue();
-    }
-
-    public void removeProduct(){
-        showStockQuantities();
-        int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
-        Product product = findProductById(idProd);
-        int quantity = Readers.readInt("How many?");
-
-        removeProduct(product, quantity);
     }
 
     public void showAllStock() {
@@ -159,19 +165,11 @@ public class FlowerShop {
         System.out.println("\t\t--------------------------------------------");
         stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
     }
+
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
-    private Product findProductById(int id) throws NullPointerException{
-        Product myProduct = stock.keySet().stream()
-                .filter(product -> product.getId() == id)
-                .findAny()
-                .orElse(null);
-        if (myProduct == null){
-            throw new NullPointerException("Item id not registered");
-        }
-        return myProduct;
-    }
+
     public void createPurchaseReceipt() {
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
@@ -190,14 +188,21 @@ public class FlowerShop {
         System.out.println(ticket);
     }
 
-    public void updateStockValue(){
-        float value = calcValueStore();
-        setStockValue(value);
-    }
     public void showPreviousPurchases(){
         System.out.println(ticketHistory);
     }
     public void showTotalSalesIncome(){
         System.out.printf("TOTAL SALES INCOME: %.2f€\n", ticketHistory.getTotalSalesAmount());
+    }
+
+    private Product findProductById(int id) throws NullPointerException{
+        Product myProduct = stock.keySet().stream()
+                .filter(product -> product.getId() == id)
+                .findAny()
+                .orElse(null);
+        if (myProduct == null){
+            throw new NullPointerException("Item id not registered");
+        }
+        return myProduct;
     }
 }
