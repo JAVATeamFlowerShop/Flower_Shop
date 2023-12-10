@@ -19,8 +19,7 @@ public class FlowerShop {
     public String getName() {
         return name;
     }
-
-
+  
     public Map<Product,Integer> getStock() {
         return stock;
     }
@@ -28,6 +27,16 @@ public class FlowerShop {
     public void setStockValue(float stockValue) {
         this.stockValue = stockValue;
     }
+
+    public static FlowerShop createFlowerShop(String shopName){
+        if(instance == null) {
+            instance = new FlowerShop(shopName);
+            return instance;
+        }
+        System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
+        return instance;
+    }
+
     private float calcValue(Map<Product, Integer> productQuantityMap){
         if (productQuantityMap.isEmpty()){
             return 0f;
@@ -37,25 +46,6 @@ public class FlowerShop {
     }
     public float calcValueStore(){
         return calcValue(stock);
-    }
-
-    public static FlowerShop createFlowerShop(){
-
-        if(instance == null) {
-
-            String shopName = Readers.readString("Introduce the flower shop name: ");
-            while (true) {
-                System.out.printf("Name: " + shopName);
-                if (Readers.readYesNo("\nIs that correct?(y/n)")) {
-                    instance = new FlowerShop(shopName);
-                    return instance;
-                } else {
-                    shopName = Readers.readString("Introduce the name again: ");
-                }
-            }
-        }
-
-        return instance;
     }
 
     public void addProduct(Product product, int quantity){
