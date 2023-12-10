@@ -17,7 +17,6 @@ public class Ticket {
     public void addProductTicket(Product product, int quantity){
         this.productMap.put(product, quantity);
         updateAmount();
-
     }
 
     private void updateAmount(){

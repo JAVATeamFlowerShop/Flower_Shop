@@ -190,7 +190,7 @@ public class FlowerShop {
         stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
     }
     public void showShopValue(){
-        System.out.printf("Shop's stock value is: %.2f eur\n", this.stockValue);
+        System.out.printf("Shop's stock value is: %.2f eur\n", stockValue);
     }
     private Product findProductById(int id){
         Product myProduct = stock.keySet().stream()
@@ -222,9 +222,8 @@ public class FlowerShop {
         System.out.println(ticket);
     }
 
-    public void updateStockValue(){
-        float value = calcValueStore();
-        setStockValue(stockValue);
+    private void updateStockValue(){
+        setStockValue(calcValueStore());
     }
     public void showPreviousPurchases(){
         System.out.println(ticketHistory);

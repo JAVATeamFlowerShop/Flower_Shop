@@ -19,12 +19,12 @@ public class TicketHistory {
     {
         ticketHistoryFile = new File(ticketHistoryPath);
         try {
-            readTickets = new Scanner(ticketHistoryFile);
+            this.readTickets = new Scanner(ticketHistoryFile);
         } catch (FileNotFoundException ex) {
             System.out.println("Problem reading ticket history");
         }
         try {
-            writeTickets = new FileWriter(ticketHistoryFile, true);
+            this.writeTickets = new FileWriter(ticketHistoryFile, true);
         } catch (IOException e) {
             System.out.println("Problem finding ticket history");
         }
