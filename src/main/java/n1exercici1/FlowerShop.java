@@ -111,32 +111,13 @@ public class FlowerShop {
         updateStockValue();
     }
 
-    public void removeProduct()
-    {
-        String name = Readers.readString("What product do you want to remove from the stock");
-        Product product = findProduct(name);
+    public void removeProduct(){
+        showStockQuantities();
+        int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
+        Product product = findProductById(idProd);
+        int quantity = Readers.readInt("How many?");
 
-        if(product != null) {
-             int quantity = Readers.readInt("What quantity?");
-
-             if (stock.get(product) >= quantity) {
-                int newQuantity = stock.get(product) - quantity;
-                stock.replace(product, newQuantity);
-             } else {
-                 System.out.println("There is not enough quantity of this product");
-             }
-        }
-        else {
-            System.out.println("This product is not found in the stock");
-        }
-    }
-
-    private Product findProduct(String name){
-        Optional<Product> product = stock.keySet().stream()
-                .filter(prod -> prod.getName().equals(name))
-                .findFirst();
-
-        return product.get();
+        removeProduct(product, quantity);
     }
 
     public void showAllStock() {
@@ -211,7 +192,7 @@ public class FlowerShop {
 
     public void updateStockValue(){
         float value = calcValueStore();
-        setStockValue(stockValue);
+        setStockValue(value);
     }
     public void showPreviousPurchases(){
         System.out.println(ticketHistory);
