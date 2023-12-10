@@ -4,7 +4,10 @@ public class Main {
     private static FlowerShop myShop;
     static {
         createFlowerShop();
-        loadInitialData();
+        loadStock();
+        /*TODO
+        loadSellHistory();
+        */
     }
 
     public static void main(String[] args) {
@@ -17,13 +20,13 @@ public class Main {
         do{
             switch (menu()){
                 case 1 -> myShop.addProduct();
-                case 2 -> myShop.removeProduct();
+                case 2 -> {try {myShop.removeProduct();}
+                    catch (NullPointerException e) {System.out.println(e.getMessage());}}
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
                 case 6 -> {try {myShop.createPurchaseReceipt();}
-                    catch (NullPointerException e) {System.err.println(e.getMessage());}
-                }
+                    catch (NullPointerException e) {System.out.println(e.getMessage());}}
                 case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
@@ -52,7 +55,7 @@ public class Main {
         myShop = FlowerShop.createFlowerShop();
     }
 
-    private static void loadInitialData(){
+    private static void loadStock(){
         LoadInitialData.createStock(myShop);
     }
 }
