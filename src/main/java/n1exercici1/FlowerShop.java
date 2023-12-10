@@ -4,15 +4,14 @@ import java.util.*;
 
 public class FlowerShop {
 
-    private String name;
+    private final String name = "Masama";
     private static Map<Product, Integer> stock;
     private float stockValue;
     private TicketHistory ticketHistory;
 
     private static FlowerShop instance;
 
-    private FlowerShop(String name) {
-        this.name = name;
+    private FlowerShop() {
         stock = new HashMap<Product, Integer>();
         this.ticketHistory = new TicketHistory();
     }
@@ -28,9 +27,9 @@ public class FlowerShop {
         this.stockValue = stockValue;
     }
 
-    public static FlowerShop createFlowerShop(String shopName){
+    public static FlowerShop createFlowerShop(){
         if(instance == null) {
-            instance = new FlowerShop(shopName);
+            instance = new FlowerShop();
             return instance;
         }
         System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
@@ -61,7 +60,7 @@ public class FlowerShop {
         }
         updateStockValue();
     }
-    public void addProductUser() throws IllegalArgumentException
+    public void addProduct() throws IllegalArgumentException
     {
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -182,19 +181,17 @@ public class FlowerShop {
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
-    private Product findProductById(int id){
+    private Product findProductById(int id) throws NullPointerException{
         Product myProduct = stock.keySet().stream()
                 .filter(product -> product.getId() == id)
                 .findAny()
                 .orElse(null);
         if (myProduct == null){
-            //TODO
-            //throw exception para evitar nullpointer exception
-            System.out.println("Item not found");
+            throw new NullPointerException("Item id not registered");
         }
         return myProduct;
     }
-    public void createPurchaseReceipt(){
+    public void createPurchaseReceipt() {
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
         boolean isFinished= false;
@@ -202,8 +199,8 @@ public class FlowerShop {
         while (!isFinished){
             showStockQuantities();
             int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
-            int quantity = Readers.readInt("How many?");
             Product product = findProductById(idProd);
+            int quantity = Readers.readInt("How many?");
             ticket.addProductTicket(product, quantity);
             removeProduct(product, quantity);
             isFinished = !Readers.readYesNo("Anything else? (y/n)");
