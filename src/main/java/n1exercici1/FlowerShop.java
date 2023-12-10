@@ -106,7 +106,7 @@ public class FlowerShop {
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
         Product product = findProductById(idProd);
-        int quantity = Readers.readInt("How many?");
+        int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many do you want to remove?");
 
         removeProduct(product, quantity);
     }
@@ -179,7 +179,7 @@ public class FlowerShop {
             showStockQuantities();
             int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
             Product product = findProductById(idProd);
-            int quantity = Readers.readInt("How many?");
+            int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many are they buying?");
             ticket.addProductTicket(product, quantity);
             removeProduct(product, quantity);
             isFinished = !Readers.readYesNo("Anything else? (y/n)");
