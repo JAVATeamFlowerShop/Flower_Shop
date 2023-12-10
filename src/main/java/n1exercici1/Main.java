@@ -4,6 +4,7 @@ public class Main {
     private static FlowerShop myShop;
     static {
         createFlowerShop();
+        loadInitialData();
     }
 
     public static void main(String[] args) {
@@ -47,8 +48,27 @@ public class Main {
 
     private static void createFlowerShop(){
         System.out.println("\nLet's create your flower shop!");
-        myShop = FlowerShop.createFlowerShop();
-        LoadInitialData.createStock(myShop);
+        String shopName = chooseFlowerShopName();
+
+        myShop = FlowerShop.createFlowerShop(shopName);
     }
 
+    private static String chooseFlowerShopName(){
+        if(myShop == null) {
+            String shopName = Readers.readString("Introduce the flower shop name: ");
+            while (true) {
+                System.out.printf("Name: " + shopName);
+                if (Readers.readYesNo("\nIs that correct?(y/n)")) {
+                    return shopName;
+                } else {
+                    shopName = Readers.readString("Introduce the name again: ");
+                }
+            }
+        }
+        return myShop.getName();
+    }
+
+    private static void loadInitialData(){
+        LoadInitialData.createStock(myShop);
+    }
 }
