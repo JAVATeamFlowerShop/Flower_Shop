@@ -37,7 +37,7 @@ public class FlowerShop {
     }
 
     private float calcValue(Map<Product, Integer> productQuantityMap){
-        if (productQuantityMap.isEmpty()){
+        if (productQuantityMap == null){
             return 0f;
         } else {
             return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
