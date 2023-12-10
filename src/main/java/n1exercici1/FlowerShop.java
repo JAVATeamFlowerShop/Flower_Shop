@@ -10,16 +10,18 @@ public class FlowerShop {
     private TicketHistory ticketHistory;
 
     private static FlowerShop instance;
-    private StockManager stockManager;
 
     private FlowerShop(String name) {
         this.name = name;
         stock = new HashMap<Product, Integer>();
         this.ticketHistory = new TicketHistory();
-        this.stockManager = new StockManager(this);
     }
     public String getName() {
         return name;
+    }
+  
+    public Map<Product,Integer> getStock() {
+        return stock;
     }
 
     public void setStockValue(float stockValue) {
@@ -144,19 +146,19 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "HEIGHT", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Tree).forEach((System.out::println));
+        stock.keySet().stream().filter(product -> product instanceof Tree).forEach(p -> System.out.println("\t\t" + p));
         System.out.println();
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "COLOUR", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Flower).forEach((System.out::println));
+        stock.keySet().stream().filter(product -> product instanceof Flower).forEach(p -> System.out.println("\t\t" + p));
         System.out.println();
         System.out.println("\tDECORATION");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "MATERIAL", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach((System.out::println));
+        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach(p -> System.out.println("\t\t" + p));
     }
 
     public void showStockQuantities(){
@@ -165,17 +167,17 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.printf("%s %8d\n",e.getKey(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Tree).forEach(e->System.out.printf("\t\t%s %8d\n",e.getKey(), e.getValue()));
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "COLOUR", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.printf("%s %8d\n", e.getKey(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Flower).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
         System.out.println("\tDECORATION");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("%s %8d\n", e.getKey(), e.getValue()));
+        stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey(), e.getValue()));
     }
     public void showShopValue(){
         System.out.printf("Shop's stock value is: %.2f eur\n", this.stockValue);
@@ -201,9 +203,12 @@ public class FlowerShop {
         while (!isFinished){
             int idProd = Readers.readInt("Please input product id");
             int quantity = Readers.readInt("How many?");
-            ticket.addProductTicket(findProductById(idProd), quantity);
-            isFinished = !Readers.readYesNo("Anything else?");
+            Product product = findProductById(idProd);
+            ticket.addProductTicket(product, quantity);
+            removeProduct(product, quantity);
+            isFinished = !Readers.readYesNo("Anything else? (y/n)");
         }
+        ticketHistory.addTicket(ticket);
         System.out.println(ticket);
     }
 
@@ -211,7 +216,10 @@ public class FlowerShop {
         float value = calcValueStore();
         setStockValue(stockValue);
     }
+    public void showPreviousPurchases(){
+        System.out.println(ticketHistory);
+    }
     public void showTotalSalesIncome(){
-        System.out.println(ticketHistory.getTotalSalesAmount() + " eur");
+        System.out.printf("%.2f eur\n", ticketHistory.getTotalSalesAmount());
     }
 }

@@ -26,7 +26,7 @@ public class Tree extends Product{
 
     @Override
     public String toString(){
-        return String.format("\t\t%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
+        return String.format("%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
     }
 
     @Override

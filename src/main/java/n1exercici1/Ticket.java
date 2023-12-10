@@ -46,6 +46,10 @@ public class Ticket {
 
     @Override
     public String toString(){
-        return "TICKET NUMBER " + getId() +"\n---------------------------------\n" + "\t TOTAL: " + getAmount();
+        String header = "TICKET NUMBER " + getId() + "\n---------------------------------------------\n" + String.format("%2s %-15s %-9s %-6s %8s\n", "ID", "NAME", "DETAIL", "PRICE", "QUANTITY");
+        StringBuilder products = new StringBuilder();
+        productMap.forEach((key, value) -> products.append(String.format("%s %8d\n", key, value)));
+        String total = "---------------------------------------------\n" + String.format("%28s %.2f€","TOTAL:", getAmount());
+        return String.format("%s%s%s\n", header, products, total);
     }
 }
