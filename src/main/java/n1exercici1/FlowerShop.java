@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import n1exercici1.exceptions.ItemNotFoundException;
+
 import java.util.*;
 
 public class FlowerShop {
@@ -102,7 +104,7 @@ public class FlowerShop {
         updateStockValue();
     }
 
-    public void removeProduct(){
+    public void removeProduct() throws ItemNotFoundException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
         Product product = findProductById(idProd);
@@ -112,16 +114,11 @@ public class FlowerShop {
     }
 
     public void removeProduct(Product product, int quantity){
-        if(product != null) {
-            if (stock.get(product) >= quantity) {
-                int newQuantity = stock.get(product) - quantity;
-                stock.replace(product, newQuantity);
-            } else {
-                System.out.println("There is not enough quantity of this product");
-            }
-        }
-        else {
-            System.out.println("This product is not found in the stock");
+        if (stock.get(product) >= quantity) {
+            int newQuantity = stock.get(product) - quantity;
+            stock.replace(product, newQuantity);
+        } else {
+            System.out.println("There is not enough quantity of this product");
         }
         updateStockValue();
     }
@@ -170,7 +167,7 @@ public class FlowerShop {
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
 
-    public void createPurchaseReceipt() {
+    public void createPurchaseReceipt() throws ItemNotFoundException{
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
         boolean isFinished= false;
@@ -195,13 +192,13 @@ public class FlowerShop {
         System.out.printf("TOTAL SALES INCOME: %.2f€\n", ticketHistory.getTotalSalesAmount());
     }
 
-    private Product findProductById(int id) throws NullPointerException{
+    private Product findProductById(int id) throws ItemNotFoundException{
         Product myProduct = stock.keySet().stream()
                 .filter(product -> product.getId() == id)
                 .findAny()
                 .orElse(null);
         if (myProduct == null){
-            throw new NullPointerException("Item id not registered");
+            throw new ItemNotFoundException();
         }
         return myProduct;
     }
