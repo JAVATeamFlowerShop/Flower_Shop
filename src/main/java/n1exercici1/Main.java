@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import n1exercici1.exceptions.ItemNotFoundException;
+
 public class Main {
     private static FlowerShop myShop;
     static {
@@ -21,12 +23,12 @@ public class Main {
             switch (menu()){
                 case 1 -> myShop.addProduct();
                 case 2 -> {try {myShop.removeProduct();}
-                    catch (NullPointerException e) {System.out.println(e.getMessage());}}
+                    catch (ItemNotFoundException e) {System.out.println(e.getMessage());}}
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
                 case 6 -> {try {myShop.createPurchaseReceipt();}
-                    catch (NullPointerException e) {System.out.println(e.getMessage());}}
+                    catch (ItemNotFoundException e) {System.out.println(e.getMessage());}}
                 case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {

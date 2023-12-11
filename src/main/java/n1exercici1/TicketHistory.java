@@ -1,12 +1,7 @@
 package n1exercici1;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class TicketHistory {
     private final String currDir = System.getProperty("user.dir");
@@ -52,5 +47,4 @@ public class TicketHistory {
         ticketHistory.forEach(allTickets::append);
         return allTickets.toString();
     }
-
 }

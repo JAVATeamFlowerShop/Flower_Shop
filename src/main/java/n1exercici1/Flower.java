@@ -3,18 +3,14 @@ package n1exercici1;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public class Flower extends Product{
-
-    private final String colour;
-    private final int id;
     private static final Product.Type type = Enum.valueOf(Product.Type.class, "FLOWER");
+    private final int id;
+    private final String colour;
+
     public Flower(String name, float price, String colour) {
         super(name, price);
         this.colour = colour;
         this.id = Product.idProd;
-    }
-
-    public String getColour() {
-        return colour;
     }
 
     public int getId() {
@@ -24,18 +20,17 @@ public class Flower extends Product{
     public Product.Type getType(){
         return type;
     }
-
-
-    @Override
-    @JsonValue
-    public String toString(){
-        return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
+    public String getColour() {
+        return colour;
     }
-
     @Override
     public boolean equals(Product p) {
         Flower f = (Flower) p;
         return this.name.equalsIgnoreCase(f.getName()) && this.price == f.getPrice() && this.colour.equalsIgnoreCase(f.getColour());
     }
-
+    @Override
+    @JsonValue
+    public String toString(){
+        return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
+    }
 }
