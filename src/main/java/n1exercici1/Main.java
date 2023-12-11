@@ -6,7 +6,6 @@ public class Main {
     private static FlowerShop myShop;
     static {
         createFlowerShop();
-        loadStock();
         /*TODO
         loadSellHistory();
         */
@@ -33,6 +32,8 @@ public class Main {
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
+                    System.out.println("Saving stock...");
+                    LoadData.saveStock(myShop.getStock());
                     System.out.println("Bye! You exited flower shop management.");
                 }
                 default -> System.err.println("Please introduce a valid option.\n");
@@ -58,6 +59,6 @@ public class Main {
     }
 
     private static void loadStock(){
-        LoadInitialData.createStock(myShop);
+        LoadData.loadStock();
     }
 }

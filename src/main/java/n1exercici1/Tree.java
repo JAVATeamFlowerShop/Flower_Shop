@@ -1,5 +1,6 @@
 package n1exercici1;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 public class Tree extends Product{
     private static final Product.Type type = Enum.valueOf(Product.Type.class, "TREE");
     private final int id;
@@ -9,6 +10,13 @@ public class Tree extends Product{
         super(name, price);
         this.height = height;
         this.id = Product.idProd;
+    }
+    public Tree(String[] splitKey){
+        super();
+        this.id = Integer.parseInt(splitKey[1]);
+        this.name = splitKey[2].toLowerCase();
+        this.price = Float.parseFloat(splitKey[3]);
+        this.height = Float.parseFloat(splitKey[4]);
     }
 
     @Override
@@ -26,7 +34,12 @@ public class Tree extends Product{
         return this.name.equalsIgnoreCase(t.getName()) && this.price == t.getPrice() && this.height == t.getHeight();
     }
     @Override
-    public String toString(){
+    public String toPrettyString(){
         return String.format("%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
+    }
+    @Override
+    @JsonValue
+    public String toString(){
+        return String.format("%s,%d,%s,%.2f,%.2f",getType(), getId(), super.getName(), super.getPrice(), getHeight());
     }
 }
