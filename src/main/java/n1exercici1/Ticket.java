@@ -14,16 +14,21 @@ public class Ticket {
         this.productMap = new HashMap<>();
     }
 
+    public int getId() {
+        return id;
+    }
+    public Map<Product, Integer> getProductMap() {
+        return productMap;
+    }
+    public float getAmount() {
+        return amount;
+    }
+
     public void addProductTicket(Product product, int quantity){
         this.productMap.put(product, quantity);
         updateAmount();
 
     }
-
-    private void updateAmount(){
-        this.amount = this.calcAmount();
-    }
-
     private float calcAmount(){
         if (productMap.isEmpty()){
             return 0f;
@@ -31,17 +36,8 @@ public class Ticket {
             return (float) productMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
         }
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public Map<Product, Integer> getProductMap() {
-        return productMap;
-    }
-
-    public float getAmount() {
-        return amount;
+    private void updateAmount(){
+        this.amount = this.calcAmount();
     }
 
     @Override
