@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Flower extends Product{
 
     private final String colour;
@@ -25,6 +27,7 @@ public class Flower extends Product{
 
 
     @Override
+    @JsonValue
     public String toString(){
         return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
     }

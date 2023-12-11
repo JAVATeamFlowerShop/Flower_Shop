@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Tree extends Product{
 
     private final float height;
@@ -25,6 +27,7 @@ public class Tree extends Product{
     }
 
     @Override
+    @JsonValue
     public String toString(){
         return String.format("%2d %-15s %.2f%-5s %5.2f€", getId(), super.getName(), getHeight(), "m", super.getPrice());
     }

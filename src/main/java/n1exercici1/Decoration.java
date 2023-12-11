@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Decoration extends Product{
     public enum Material {WOOD, PLASTIC}
     private Material material;
@@ -26,6 +28,7 @@ public class Decoration extends Product{
     }
 
     @Override
+    @JsonValue
     public String toString(){
         return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getMaterial(), super.getPrice());
     }

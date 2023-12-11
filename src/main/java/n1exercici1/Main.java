@@ -4,7 +4,7 @@ public class Main {
     private static FlowerShop myShop;
     static {
         createFlowerShop();
-        loadInitialData();
+        //loadInitialData();
     }
 
     public static void main(String[] args) {
@@ -53,6 +53,6 @@ public class Main {
     }
 
     private static void loadInitialData(){
-        LoadInitialData.createStock(myShop);
+        LoadData.loadStock();
     }
 }
