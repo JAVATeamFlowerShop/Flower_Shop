@@ -11,6 +11,13 @@ public class Tree extends Product{
         this.height = height;
         this.id = Product.idProd;
     }
+    public Tree(String[] splitKey){
+        super();
+        this.id = Integer.parseInt(splitKey[1]);
+        this.name = splitKey[2].toLowerCase();
+        this.price = Float.parseFloat(splitKey[3]);
+        this.height = Float.parseFloat(splitKey[4]);
+    }
 
     @Override
     public int getId() {

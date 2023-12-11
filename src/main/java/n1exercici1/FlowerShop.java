@@ -1,5 +1,7 @@
 package n1exercici1;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 import n1exercici1.exceptions.ItemNotFoundException;
 
 import java.util.*;
@@ -7,14 +9,14 @@ import java.util.*;
 public class FlowerShop {
 
     private final String name = "Masama";
+
     private static Map<Product, Integer> stock;
     private float stockValue;
     private TicketHistory ticketHistory;
 
     private static FlowerShop instance;
-
     private FlowerShop() {
-        stock = new HashMap<Product, Integer>();
+        stock = LoadData.loadStock();
         this.ticketHistory = new TicketHistory();
     }
     public String getName() {
@@ -28,7 +30,6 @@ public class FlowerShop {
     public void setStockValue(float stockValue) {
         this.stockValue = stockValue;
     }
-
     public static FlowerShop createFlowerShop(){
         if(instance == null) {
             instance = new FlowerShop();

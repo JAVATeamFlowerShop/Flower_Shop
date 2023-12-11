@@ -14,6 +14,14 @@ public class Decoration extends Product{
         this.material = material;
         this.id = Product.idProd;
     }
+    public Decoration(String[] splitKey){
+        super();
+        this.id = Integer.parseInt(splitKey[1]);
+        this.name = splitKey[2].toLowerCase();
+        this.price = Float.parseFloat(splitKey[3]);
+        Material material = Enum.valueOf(Material.class, splitKey[4]);
+        this.material = material;
+    }
 
     @Override
     public int getId() {

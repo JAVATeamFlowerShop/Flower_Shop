@@ -1,6 +1,7 @@
 package n1exercici1;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.*;
+import com.fasterxml.jackson.databind.*;
 import java.io.*;
 import java.util.*;
 
@@ -30,12 +31,15 @@ public class LoadData <T>{
         }
     }
 
-    public static void loadStock(){
+    public static Map<Product, Integer> loadStock(){
         try{
-            Map<Product, Integer> stock = mapper.readValue(stockFile, Map.class);
+            TypeReference<HashMap<Product, Integer>> typeReference = new TypeReference<HashMap<Product, Integer>>(){};
+            Map<Product, Integer> stock = mapper.readValue(stockFile,typeReference);
+            return stock;
         }
         catch (IOException ex){
-            System.err.println("Problem loading stock data");
+            System.err.println("Problem loading stock data, starting with empty stock");
+            return new HashMap<Product, Integer>();
         }
     }
     public static void loadTickets(){
