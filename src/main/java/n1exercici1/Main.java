@@ -46,7 +46,7 @@ public class Main {
                 "3- Show all products in stock\n" +
                 "4- Show stock with quantities\n" +
                 "5- Show total flower shop value\n" +
-                "6- Create purchase receipts with multiple products\n" +
+                "6- Generate sales ticket\n" +
                 "7- Show list of previous purchases\n" +
                 "8- Show total sales income\n" +
                 "0- Exit\n" +
