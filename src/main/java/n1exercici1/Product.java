@@ -25,4 +25,5 @@ public abstract class Product {
     }
     public abstract Product.Type getType();
     public abstract boolean equals(Product p);
+    public abstract String toPrettyString();
 }
