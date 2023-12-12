@@ -1,8 +1,10 @@
 package n1exercici1;
 
 import n1exercici1.exceptions.ItemNotFoundException;
+import n1exercici1.exceptions.NotEnoughStockException;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class FlowerShop {
     private final String name = "CiberFlower";
@@ -12,7 +14,12 @@ public class FlowerShop {
     private static FlowerShop instance;
 
     private FlowerShop() {
-        stock = LoadData.loadStock();
+        Map<Product, Integer> stockWithNull;
+        stockWithNull = LoadData.loadStock();
+        stock = stockWithNull.entrySet().stream()
+                .filter(e-> e.getKey() != null)
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        updateStockValue();
         this.ticketHistory = LoadData.loadTickets();
     }
 
@@ -45,6 +52,7 @@ public class FlowerShop {
     }
     private float calcValue(Map<Product, Integer> productQuantityMap){
         if (productQuantityMap == null){
+            System.out.println("stock nulo");
             return 0f;
         } else {
             return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
@@ -97,7 +105,7 @@ public class FlowerShop {
         }
         updateStockValue();
     }
-    public void removeProduct() throws ItemNotFoundException{
+    public void removeProduct() throws ItemNotFoundException, NotEnoughStockException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
         Product product = findProductById(idProd);
@@ -105,12 +113,12 @@ public class FlowerShop {
 
         removeProduct(product, quantity);
     }
-    public void removeProduct(Product product, int quantity){
+    public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
         if (stock.get(product) >= quantity) {
             int newQuantity = stock.get(product) - quantity;
             stock.replace(product, newQuantity);
         } else {
-            System.out.println("There is not enough quantity of this product");
+            throw new NotEnoughStockException();
         }
         updateStockValue();
     }
@@ -155,7 +163,7 @@ public class FlowerShop {
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
-    public void createPurchaseReceipt() throws ItemNotFoundException{
+    public void createPurchaseReceipt(){
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
         boolean isFinished= false;
@@ -163,14 +171,27 @@ public class FlowerShop {
         while (!isFinished){
             showStockQuantities();
             int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
-            Product product = findProductById(idProd);
-            int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many are they buying?");
-            ticket.addProductTicket(product, quantity);
-            removeProduct(product, quantity);
-            isFinished = !Readers.readYesNo("Anything else? (y/n)");
+            try{
+                Product product = findProductById(idProd);
+                int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many are they buying?");
+                removeProduct(product, quantity);
+                ticket.addProductTicket(product, quantity);
+            }
+            catch (NotEnoughStockException | ItemNotFoundException ex){
+                System.err.println(ex.getMessage());
+            }
+            finally {
+                isFinished = !Readers.readYesNo("Anything else? (y/n)");
+            }
         }
-        ticketHistory.addTicket(ticket);
-        System.out.println(ticket.toPrettyString());
+        if(!ticket.getProductMap().isEmpty()){
+            ticketHistory.addTicket(ticket);
+            System.out.println(ticket.toPrettyString());
+        }
+        else{
+            ticket.decreaseIdTicket();
+            System.out.println("No items bought, no ticket created");
+        }
     }
     public void showPreviousPurchases(){
         System.out.println(ticketHistory.toPrettyString());

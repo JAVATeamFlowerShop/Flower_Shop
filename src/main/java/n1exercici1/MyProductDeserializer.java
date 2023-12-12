@@ -1,7 +1,7 @@
 package n1exercici1;
 
 import com.fasterxml.jackson.databind.*;
-import n1exercici1.exceptions.NoSuchTypeProduct;
+import n1exercici1.exceptions.NoSuchTypeProductException;
 
 import java.io.*;
 
@@ -27,10 +27,10 @@ public class MyProductDeserializer extends KeyDeserializer {
                 String colour = splitKey[4];
                 return new Flower(id, name, price, colour);
             } else {
-                throw new NoSuchTypeProduct();
+                throw new NoSuchTypeProductException();
             }
         }
-        catch (NoSuchTypeProduct | IllegalArgumentException ex){
+        catch (NoSuchTypeProductException | IllegalArgumentException ex){
             System.err.println("Found the following item: " + key);
             System.err.println("Format error. Skipping item.");
             return null;

@@ -17,4 +17,16 @@
     "FLOWER,2,rose,3.50,red" : 1
   },
   "amount" : 3.5
+}, {
+  "id" : 4,
+  "productMap" : {
+    "DECORATION,6,wind spinner,5.20,PLASTIC" : 1
+  },
+  "amount" : 5.2
+}, {
+  "id" : 5,
+  "productMap" : {
+    "FLOWER,2,rose,3.50,red" : 10
+  },
+  "amount" : 35.0
 } ]

@@ -23,7 +23,9 @@ public class Ticket {
     public float getAmount() {
         return amount;
     }
-
+    public void decreaseIdTicket(){
+        idTicket--;
+    }
     public void addProductTicket(Product product, int quantity){
         this.productMap.put(product, quantity);
         updateAmount();

@@ -1,6 +1,7 @@
 package n1exercici1;
 
 import n1exercici1.exceptions.ItemNotFoundException;
+import n1exercici1.exceptions.NotEnoughStockException;
 
 import java.util.Locale;
 
@@ -9,6 +10,7 @@ public class Main {
     static {
         Locale.setDefault(Locale.ENGLISH);
         createFlowerShop();
+        System.out.println(myShop.getStock());
     }
 
     public static void main(String[] args) {
@@ -22,14 +24,11 @@ public class Main {
             switch (menu()){
                 case 1 -> myShop.addProduct();
                 case 2 -> {try {myShop.removeProduct();}
-                    catch (ItemNotFoundException e) {System.out.println(e.getMessage());}}
+                    catch (NotEnoughStockException | ItemNotFoundException e) {System.out.println(e.getMessage());}}
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
-                case 6 -> {try {myShop.createPurchaseReceipt();}
-                    catch (ItemNotFoundException e) {System.out.println(e.getMessage());}}
-                //TODO
-                //Error al intentar comprar un producto con stock 0
+                case 6 -> myShop.createPurchaseReceipt();
                 case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
