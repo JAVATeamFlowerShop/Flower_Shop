@@ -12,12 +12,12 @@ public class Flower extends Product{
         this.colour = colour;
         this.id = Product.idProd;
     }
-    public Flower(String[] splitKey){
-        super();
-        this.id = Integer.parseInt(splitKey[1]);
-        this.name = splitKey[2].toLowerCase();
-        this.price = Float.parseFloat(splitKey[3]);
-        this.colour = splitKey[4].toLowerCase();
+    public Flower(int id, String name, float price, String colour){
+        super(id);
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.colour = colour;
     }
 
     public int getId() {

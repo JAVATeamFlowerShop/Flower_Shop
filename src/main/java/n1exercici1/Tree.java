@@ -11,12 +11,12 @@ public class Tree extends Product{
         this.height = height;
         this.id = Product.idProd;
     }
-    public Tree(String[] splitKey){
-        super();
-        this.id = Integer.parseInt(splitKey[1]);
-        this.name = splitKey[2].toLowerCase();
-        this.price = Float.parseFloat(splitKey[3]);
-        this.height = Float.parseFloat(splitKey[4]);
+    public Tree(int id, String name, float price, float height){
+        super(id);
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.height = height;
     }
 
     @Override

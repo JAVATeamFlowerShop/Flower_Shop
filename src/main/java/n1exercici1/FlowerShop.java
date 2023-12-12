@@ -1,32 +1,30 @@
 package n1exercici1;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.*;
 import n1exercici1.exceptions.ItemNotFoundException;
 
 import java.util.*;
 
 public class FlowerShop {
-
-    private final String name = "Masama";
-
+    private final String name = "CiberFlower";
     private static Map<Product, Integer> stock;
     private float stockValue;
     private TicketHistory ticketHistory;
-
     private static FlowerShop instance;
+
     private FlowerShop() {
         stock = LoadData.loadStock();
-        this.ticketHistory = new TicketHistory();
+        this.ticketHistory = LoadData.loadTickets();
     }
+
     public String getName() {
         return name;
     }
-  
     public Map<Product,Integer> getStock() {
         return stock;
     }
-
+    public TicketHistory getTicketHistory(){
+        return ticketHistory;
+    }
     public void setStockValue(float stockValue) {
         this.stockValue = stockValue;
     }
@@ -42,11 +40,9 @@ public class FlowerShop {
     public void updateStockValue(){
         setStockValue(calcValueStore());
     }
-
     public float calcValueStore(){
         return calcValue(stock);
     }
-
     private float calcValue(Map<Product, Integer> productQuantityMap){
         if (productQuantityMap == null){
             return 0f;
@@ -54,7 +50,6 @@ public class FlowerShop {
             return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
         }
     }
-
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -89,7 +84,6 @@ public class FlowerShop {
         }
         addProduct(product, quantity);
     }
-
     public void addProduct(Product product, int quantity){
         if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
             System.out.println("Product already in stock, quantity will be added");
@@ -103,7 +97,6 @@ public class FlowerShop {
         }
         updateStockValue();
     }
-
     public void removeProduct() throws ItemNotFoundException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
@@ -112,7 +105,6 @@ public class FlowerShop {
 
         removeProduct(product, quantity);
     }
-
     public void removeProduct(Product product, int quantity){
         if (stock.get(product) >= quantity) {
             int newQuantity = stock.get(product) - quantity;
@@ -122,7 +114,6 @@ public class FlowerShop {
         }
         updateStockValue();
     }
-
     public void showAllStock() {
         System.out.println("STOCK:");
         System.out.println("\tTREES");
@@ -143,7 +134,6 @@ public class FlowerShop {
         System.out.println("\t\t-----------------------------------");
         stock.keySet().stream().filter(product -> product instanceof Decoration).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
     }
-
     public void showStockQuantities(){
         System.out.println("STOCK WITH QUANTITIES");
         System.out.println("\tTREES");
@@ -162,11 +152,9 @@ public class FlowerShop {
         System.out.println("\t\t--------------------------------------------");
         stock.entrySet().stream().filter(e -> e.getKey() instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n", e.getKey().toPrettyString(), e.getValue()));
     }
-
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
     }
-
     public void createPurchaseReceipt() throws ItemNotFoundException{
         System.out.println("Let's create the purchase ticket");
         Ticket ticket = new Ticket();
@@ -182,16 +170,14 @@ public class FlowerShop {
             isFinished = !Readers.readYesNo("Anything else? (y/n)");
         }
         ticketHistory.addTicket(ticket);
-        System.out.println(ticket);
+        System.out.println(ticket.toPrettyString());
     }
-
     public void showPreviousPurchases(){
-        System.out.println(ticketHistory);
+        System.out.println(ticketHistory.toPrettyString());
     }
     public void showTotalSalesIncome(){
-        System.out.printf("TOTAL SALES INCOME: %.2f€\n", ticketHistory.getTotalSalesAmount());
+        System.out.printf("TOTAL SALES INCOME: %.2f€\n", TicketHistory.getTotalSalesAmount());
     }
-
     private Product findProductById(int id) throws ItemNotFoundException{
         Product myProduct = stock.keySet().stream()
                 .filter(product -> product.getId() == id)

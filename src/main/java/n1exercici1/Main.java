@@ -2,13 +2,13 @@ package n1exercici1;
 
 import n1exercici1.exceptions.ItemNotFoundException;
 
+import java.util.Locale;
+
 public class Main {
     private static FlowerShop myShop;
     static {
+        Locale.setDefault(Locale.ENGLISH);
         createFlowerShop();
-        /*TODO
-        loadSellHistory();
-        */
     }
 
     public static void main(String[] args) {
@@ -28,12 +28,16 @@ public class Main {
                 case 5 -> myShop.showShopValue();
                 case 6 -> {try {myShop.createPurchaseReceipt();}
                     catch (ItemNotFoundException e) {System.out.println(e.getMessage());}}
+                //TODO
+                //Error al intentar comprar un producto con stock 0
                 case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
                     System.out.println("Saving stock...");
                     LoadData.saveStock(myShop.getStock());
+                    System.out.println("Saving tickets...");
+                    LoadData.saveTickets(myShop.getTicketHistory());
                     System.out.println("Bye! You exited flower shop management.");
                 }
                 default -> System.err.println("Please introduce a valid option.\n");
@@ -47,18 +51,13 @@ public class Main {
                 "3- Show all products in stock\n" +
                 "4- Show stock with quantities\n" +
                 "5- Show total flower shop value\n" +
-                "6- Create purchase receipts with multiple products\n" +
+                "6- Generate sales ticket\n" +
                 "7- Show list of previous purchases\n" +
                 "8- Show total sales income\n" +
                 "0- Exit\n" +
                 "Choose an option: ");
     }
-
     private static void createFlowerShop(){
         myShop = FlowerShop.createFlowerShop();
-    }
-
-    private static void loadStock(){
-        LoadData.loadStock();
     }
 }

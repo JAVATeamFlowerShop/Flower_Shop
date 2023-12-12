@@ -16,38 +16,53 @@ public class LoadData <T>{
     public static void saveStock(Map<Product, Integer> stock){
         try{
             mapper.writerWithDefaultPrettyPrinter().writeValue(stockFile, stock);
+            System.out.println("Stock successfully saved!");
         }
         catch (IOException ex){
             System.err.println("Problem saving stock data");
         }
     }
-
-    public static void saveTicket(Ticket ticket){
+    public static void saveTickets(TicketHistory ticketHistory){
+        List<Ticket> listTickets = ticketHistory.getTicketList();
         try{
-            mapper.writerWithDefaultPrettyPrinter().writeValue(ticketFile, ticket);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(ticketFile, listTickets);
+            System.out.println("Tickets successfully saved!");
         }
         catch (IOException ex){
             System.err.println("Problem saving ticket data");
         }
     }
-
     public static Map<Product, Integer> loadStock(){
+        System.out.println("Loading previous stock...");
         try{
             TypeReference<HashMap<Product, Integer>> typeReference = new TypeReference<HashMap<Product, Integer>>(){};
             Map<Product, Integer> stock = mapper.readValue(stockFile,typeReference);
+            System.out.println("Stock successfully loaded");
             return stock;
         }
         catch (IOException ex){
+            ex.printStackTrace();
             System.err.println("Problem loading stock data, starting with empty stock");
             return new HashMap<Product, Integer>();
         }
     }
-    public static void loadTickets(){
+    public static TicketHistory loadTickets(){
+        System.out.println("Loading previous tickets...");
         try{
-            Ticket ticket = mapper.readValue(ticketFile, Ticket.class);
+            TypeReference<List<Ticket>> typeReference = new TypeReference<List<Ticket>>(){};
+            List<Ticket> ticketList = mapper.readValue(ticketFile, typeReference);
+            TicketHistory ticketHistory = new TicketHistory(ticketList);
+            System.out.println("Previous tickets successfully loaded");
+            return ticketHistory;
+        }
+        catch (com.fasterxml.jackson.databind.exc.MismatchedInputException ex){
+            System.out.println("Empty tickets file, starting with no previous tickets");
+            return new TicketHistory();
         }
         catch (IOException ex){
-            System.err.println("Problem loading stock data");
+            ex.printStackTrace();
+            System.err.println("Problem loading ticket data, starting with no previous tickets");
+            return new TicketHistory();
         }
     }
 }

@@ -1,12 +1,16 @@
 {
-  "TREE,1,lemon tree,45,99,0,95" : 5,
-  "FLOWER,2,rose,3,50,red" : 100,
-  "DECORATION,3,floral,14,75,WOOD" : 6,
-  "TREE,8,yucca,25,00,0,60" : 9,
-  "FLOWER,5,rose,3,50,blue" : 85,
-  "DECORATION,4,small vase,12,99,PLASTIC" : 12,
-  "DECORATION,6,wind spinner,5,20,PLASTIC" : 3,
-  "DECORATION,9,small vase,15,99,WOOD" : 8,
-  "FLOWER,7,tulip,2,80,pink" : 50,
-  "TREE,10,money tree,24,94,1,20" : 3
+  "TREE,1,lemon tree,45.99,tall" : 35,
+  "DECORATION,14,medium vase,12.99,PLASTIC" : 10,
+  "FLOWER,11,sunflower,3.99,yellow" : 40,
+  "DECORATION,13,large vase,15.99,PLASTIC" : 4,
+  "FOOD,3,floral,14.75,WOOD" : 14,
+  "DECORATION,6,wind spinner,5.20,PLASTIC" : 7,
+  "TREE,10,money tree,24.94,1.20" : 8,
+  "TREE,8,yucca,25.00,0.60" : 0,
+  "FLOWER,2,rose,3.50,red" : 150,
+  "DECORATION,4,small vase,12.99,PLASTIC" : 3,
+  "FLOWER,7,tulip,2.80,pink" : 46,
+  "TREE,12,pine,30.99,2.30" : 5,
+  "DECORATION,9,small vase,15.99,WOOD" : 12,
+  "FLOWER,5,rose,3.50,blue" : 75
 }
