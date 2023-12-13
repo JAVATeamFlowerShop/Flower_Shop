@@ -1,12 +1,10 @@
 package n1exercici1;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(using = MyProductSerializer.class)
 @JsonDeserialize(keyUsing = MyProductDeserializer.class)
 public abstract class Product {
-    protected static int idProd;
+    protected static int idProd = 0;
     public enum Type {FLOWER,TREE,DECORATION};
     protected String name;
     protected float price;
@@ -17,7 +15,11 @@ public abstract class Product {
         this.name = name;
         this.price = price;
     }
-    public Product(){}
+    public Product(int id){
+        if(id > idProd){
+            idProd = id;
+        }
+    }
     public static int getIdProd() {
         return idProd;
     }
