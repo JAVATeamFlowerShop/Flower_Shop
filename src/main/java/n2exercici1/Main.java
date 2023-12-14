@@ -1,8 +1,13 @@
-package n1exercici1;
+package n2exercici1;
+
+import n2exercici1.exceptions.*;
+
+import java.util.Locale;
 
 public class Main {
     private static FlowerShop myShop;
     static {
+        Locale.setDefault(Locale.ENGLISH);
         createFlowerShop();
     }
 
@@ -15,13 +20,14 @@ public class Main {
         boolean exit = false;
         do{
             switch (menu()){
-                case 1 -> myShop.addProductUser();
-                case 2 -> myShop.removeProduct();
+                case 1 -> myShop.addProduct();
+                case 2 -> {try {myShop.removeProduct();}
+                    catch (NotEnoughStockException | ItemNotFoundException e) {System.out.println(e.getMessage());}}
                 case 3 -> myShop.showAllStock();
                 case 4 -> myShop.showStockQuantities();
                 case 5 -> myShop.showShopValue();
                 case 6 -> myShop.createPurchaseReceipt();
-//                case 7 -> showPreviousPurchases();
+                case 7 -> myShop.showPreviousPurchases();
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
@@ -38,17 +44,13 @@ public class Main {
                 "3- Show all products in stock\n" +
                 "4- Show stock with quantities\n" +
                 "5- Show total flower shop value\n" +
-                "6- Create purchase receipts with multiple products\n" +
+                "6- Generate sales ticket\n" +
                 "7- Show list of previous purchases\n" +
                 "8- Show total sales income\n" +
                 "0- Exit\n" +
                 "Choose an option: ");
     }
-
     private static void createFlowerShop(){
-        System.out.println("\nLet's create your flower shop!");
         myShop = FlowerShop.createFlowerShop();
-        LoadInitialData.createStock(myShop);
     }
-
 }
