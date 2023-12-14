@@ -1,3 +1,5 @@
+package n1exercici1;
+
 import n1exercici1.*;
 import n1exercici1.exceptions.*;
 import org.junit.jupiter.api.*;
