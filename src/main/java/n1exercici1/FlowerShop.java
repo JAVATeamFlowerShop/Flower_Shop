@@ -1,7 +1,6 @@
 package n1exercici1;
 
-import n1exercici1.exceptions.ItemNotFoundException;
-import n1exercici1.exceptions.NotEnoughStockException;
+import n1exercici1.exceptions.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -69,26 +68,21 @@ public class FlowerShop {
 
         Product product = null;
 
-        switch(type)
-        {
-            case 1:
+        switch (type) {
+            case 1 -> {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                product = new Decoration(name,price, material);
-                break;
-
-            case 2:
+                product = new Decoration(name, price, material);
+            }
+            case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
-                product = new Flower(name,price, colour);
-                break;
-
-            case 3 :
+                product = new Flower(name, price, colour);
+            }
+            case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
-                break;
-
-            default:
-                System.out.println("This option is not valid");
+            }
+            default -> System.out.println("This option is not valid");
         }
         addProduct(product, quantity);
     }

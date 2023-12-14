@@ -29,4 +29,10 @@
     "FLOWER,2,rose,3.50,red" : 10
   },
   "amount" : 35.0
+}, {
+  "id" : 6,
+  "productMap" : {
+    "FLOWER,2,rose,3.50,red" : 10
+  },
+  "amount" : 35.0
 } ]
