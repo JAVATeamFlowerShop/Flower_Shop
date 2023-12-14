@@ -1,7 +1,7 @@
 package n2exercici1;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 public class Ticket {
     private static int idTicket = 0;
     private int id;

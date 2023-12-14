@@ -1,7 +1,6 @@
 package n2exercici1;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Readers {
     private static Scanner in = new Scanner(System.in);

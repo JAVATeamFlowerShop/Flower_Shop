@@ -2,8 +2,7 @@ package n2exercici1;
 
 import n2exercici1.exceptions.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FlowerShop {
     private final String name = "CiberFlower";

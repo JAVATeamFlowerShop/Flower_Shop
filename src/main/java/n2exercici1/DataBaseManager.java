@@ -1,10 +1,7 @@
 package n2exercici1;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataBaseManager {
     private static Connection con;
