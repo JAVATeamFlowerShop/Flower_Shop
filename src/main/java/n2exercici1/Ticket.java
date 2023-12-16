@@ -10,7 +10,6 @@ public class Ticket {
 
     public Ticket(){
         idTicket++;
-        this.id = idTicket;
         this.productMap = new HashMap<>();
     }
     public Ticket(int id, Map<Product, Integer> productMap, float amount){
@@ -22,6 +21,9 @@ public class Ticket {
         this.amount = amount;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }

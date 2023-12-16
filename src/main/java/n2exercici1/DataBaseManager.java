@@ -26,16 +26,16 @@ public class DataBaseManager {
         }
     }
 
-    private static void execute(String query){
+    private static void executeInsert(String query){
         try {
             statementProd.execute(query);
-            System.out.println("Product successfully saved");
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
     }
-    public static void saveProduct(Product product, int quantity){
+
+    private static void addProduct(Product product, int quantity){
         System.out.println("Saving product...");
         String query = String.format("INSERT INTO products VALUES(%d, '%s', '%s', %.2f, %d);", product.getId(), product.getType(), product.getName(), product.getPrice(), quantity);
         String subquery;
@@ -51,19 +51,70 @@ public class DataBaseManager {
             Decoration decoration = (Decoration) product;
             subquery = String.format("INSERT INTO decorations VALUES(%d, '%s');", decoration.getId(), decoration.getType());
         }
-        execute(query);
-        execute(subquery);
+        executeInsert(query);
+        executeInsert(subquery);
+        System.out.println("Product successfully saved");
     }
-    public static void updateStock(Product product, int quantity){
+    public static void changeStock(Product product, int quantity){
         System.out.println("Updating product stock...");
-        String query = String.format("UPDATE products SET quantity = %d WHERE idproduct = %d", quantity, product.getId());
-        execute(query);
+        String query = String.format("UPDATE products SET quantity = quantity + %d WHERE id = %d", quantity, product.getId());
+        executeInsert(query);
+        System.out.println("Product stock successfully updated");
     }
+
+    public static void saveProduct(Product product, int quantity) {
+        int id = product.getId();
+        String query = String.format("SELECT * FROM products WHERE id = %d", id);
+        try{
+            ResultSet resultSet = statementProd.executeQuery(query);
+            if(resultSet.next()){
+                System.out.println("Product already exists");
+                changeStock(product, quantity);
+            }
+            else{
+                addProduct(product, quantity);
+            }
+            resultSet.close();
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
+            System.err.println("Problem saving product to database");
+        }
+
+    }
+
+    public static int findProdQuantity(Product product){
+        String query = String.format("SELECT quantity FROM products WHERE id = %d", product.getId());
+        try{
+            ResultSet resultSet = statementProd.executeQuery(query);
+            resultSet.next();
+            int quantity = resultSet.getInt("quantity");
+            resultSet.close();
+            return quantity;
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            System.err.println("Problem with database");
+        }
+        return -1;
+    }
+
     public static void saveTicket(Ticket ticket){
-        String query = String.format("INSERT INTO tickets VALUES(%d, %.2f)", ticket.getId(), ticket.getAmount());
-        execute(query);
-        Map<Product, Integer> products = ticket.getProductMap();
-        products.forEach((pro, quantity) -> execute(String.format("INSERT INTO ticket_has_products VALUES(%d, %d, %d)", ticket.getId(), pro.getId(), quantity)));
+        String query = String.format("INSERT INTO tickets (total) VALUES(%.2f)", ticket.getAmount());
+        executeInsert(query);
+        try{
+            ResultSet resultSet = statementTic.executeQuery("SELECT id FROM tickets WHERE id = LAST_INSERT_ID()");
+            resultSet.next();
+            ticket.setId(resultSet.getInt("id"));
+            resultSet.close();
+            Map<Product, Integer> products = ticket.getProductMap();
+            products.forEach((pro, quantity) -> executeInsert(String.format("INSERT INTO tickets_has_products (idTicket, idProduct, quantity) VALUES(%d, %d, %d)", ticket.getId(), pro.getId(), quantity)));
+
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            System.err.println("Problem with database");
+        }
     }
     private static Flower loadFlower(int id, String name, float price) throws SQLException{
         String query = String.format("SELECT colour FROM flowers WHERE idflower = %d", id);
@@ -103,9 +154,10 @@ public class DataBaseManager {
             return loadDecoration(id, name, price);
         }
     }
-    private static Product loadProductWithId(int id) throws SQLException{
+    private static Product loadProductWithId(int id) throws SQLException {
         String query = String.format("SELECT * FROM products WHERE id = %d;", id);
         ResultSet resultSet = statementProd.executeQuery(query);
+        resultSet.next();
         Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
         String name = resultSet.getString("name");
         float price = resultSet.getFloat("price");
@@ -114,15 +166,39 @@ public class DataBaseManager {
         return product;
     }
 
-
-    public static Map<Product, Integer> loadStock(){
-        System.out.println("Loading stock...");
-        Map<Product, Integer> stock = new HashMap<>();
+    private static ResultSet getProducts() throws SQLException{
         String query = "SELECT * FROM products;";
-        try {
-            ResultSet resultSet = statementProd.executeQuery(query);
+        return statementProd.executeQuery(query);
+    }
+
+    public static List<Product> loadStock(){
+        System.out.println("Loading stock...");
+        List<Product> products = new ArrayList<>();
+        try{
+            ResultSet resultSet = getProducts();
             while(resultSet.next()){
-                int id = resultSet.getInt("idproduct");
+                int id = resultSet.getInt("id");
+                Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
+                String name = resultSet.getString("name");
+                float price = resultSet.getFloat("price");
+                Product product = loadProduct(id, type.toString(), name, price);
+                products.add(product);
+            }
+            resultSet.close();
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            System.err.println("Problem loading stock data, starting with empty stock");
+        }
+        return products;
+    }
+
+    public static Map<Product, Integer> loadStockQuantities(){
+        Map<Product, Integer> stock = new HashMap<>();
+        try {
+            ResultSet resultSet = getProducts();
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
                 Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
                 String name = resultSet.getString("name");
                 float price = resultSet.getFloat("price");
@@ -131,24 +207,53 @@ public class DataBaseManager {
                 stock.put(product, quantity);
             }
             resultSet.close();
-            System.out.println("Stock successfully loaded");
-            return stock;
         }
         catch (SQLException ex) {
             ex.printStackTrace();
             System.err.println("Problem loading stock data, starting with empty stock");
-            return new HashMap<Product, Integer>();
         }
+        return stock;
+    }
+    public static float calcStockValue(){
+        float total = 0.0f;
+        String query = "SELECT SUM(quantity * price) FROM products";
+        try{
+            ResultSet resultSet = statementProd.executeQuery(query);
+            resultSet.next();
+            total = resultSet.getFloat("SUM(quantity * price)");
+            resultSet.close();
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            System.err.println("Problem with database");
+        }
+        return total;
     }
 
+    public static float calcSalesValue(){
+        float total = 0.0f;
+        String query = "SELECT SUM(total) FROM tickets";
+        try{
+            ResultSet resultSet = statementTic.executeQuery(query);
+            resultSet.next();
+            total = resultSet.getFloat("SUM(total)");
+            resultSet.close();
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
+            System.err.println("Problem with database");
+        }
+        return total;
+    }
     private static Map<Product, Integer> loadTicketProducts(int idTicket) throws SQLException{
         Map<Product, Integer> productMap = new HashMap<>();
         String query = String.format("SELECT * FROM tickets_has_products WHERE idTicket = %d", idTicket);
         ResultSet resultSetTicPro = statementTicPro.executeQuery(query);
+        resultSetTicPro.next();
         while (resultSetTicPro.next()){
-            int idProduct = resultSetTicPro.getInt("idproduct");
+            int id = resultSetTicPro.getInt("idProduct");
             int quantity = resultSetTicPro.getInt("quantity");
-            Product product = loadProductWithId(idProduct);
+            Product product = loadProductWithId(id);
             productMap.put(product, quantity);
         }
         resultSetTicPro.close();
@@ -156,7 +261,6 @@ public class DataBaseManager {
     }
 
     public static List<Ticket> loadTickets(){
-        System.out.println("Loading tickets...");
         List<Ticket> tickets = new ArrayList<>();
         String query = "SELECT * FROM tickets";
         try{
@@ -169,13 +273,12 @@ public class DataBaseManager {
                 tickets.add(ticket);
             }
             resultSet.close();
-            System.out.println("Tickets successfully loaded");
             return tickets;
         }
         catch (SQLException ex) {
             ex.printStackTrace();
-            System.err.println("Problem loading ticket data, starting with no previous sales");
-            return new ArrayList<Ticket>();
+            System.err.println("Problem with database");
+            return tickets;
         }
     }
 }

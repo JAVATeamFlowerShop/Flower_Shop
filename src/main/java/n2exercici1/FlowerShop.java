@@ -6,24 +6,18 @@ import java.util.*;
 
 public class FlowerShop {
     private final String name = "CiberFlower";
-    private static Map<Product, Integer> stock;
+    private List<Product> stock;
     private float stockValue;
     private float totalSalesAmount;
-    private List<Ticket> tickets;
     private static FlowerShop instance;
-
     private FlowerShop() {
         stock = DataBaseManager.loadStock();
         updateStockValue();
-        tickets = DataBaseManager.loadTickets();
         updateTotalSalesAmount();
     }
 
     public String getName() {
         return name;
-    }
-    public Map<Product,Integer> getStock() {
-        return stock;
     }
     public float getTotalSalesAmount() {
         return totalSalesAmount;
@@ -50,20 +44,12 @@ public class FlowerShop {
         setTotalSalesAmount(calcSalesValue());
     }
     public float calcValueStore(){
-        return calcValue(stock);
+        return DataBaseManager.calcStockValue();
     }
     private float calcSalesValue(){
-        return (float)tickets.stream()
-                .mapToDouble(Ticket::getAmount).sum();
+        return DataBaseManager.calcSalesValue();
     }
-    private float calcValue(Map<Product, Integer> productQuantityMap){
-        if (productQuantityMap == null){
-            System.out.println("stock nulo");
-            return 0f;
-        } else {
-            return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
-        }
-    }
+
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -73,53 +59,48 @@ public class FlowerShop {
         int quantity = Readers.readInt("Introduce its quantity");
         float price = Readers.readFloat("Introduce its price");
 
-        Product product = null;
+        Product product;
 
         switch (type) {
             case 1 -> {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
+                DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
                 product = new Flower(name, price, colour);
+                DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
+                DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
-            default -> System.out.println("This option is not valid");
+            default -> System.out.println("This option is not valid, product not saved");
         }
-        addProduct(product, quantity);
+        updateStockValue();
     }
     public void addProduct(Product product, int quantity){
-        if(stock.entrySet().stream().anyMatch(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))){
-            System.out.println("Product already in stock, quantity will be added");
-            stock.entrySet().stream()
-                    .filter(e-> e.getKey().getType() == product.getType() && e.getKey().equals(product))
-                    .forEach(e-> e.setValue(e.getValue() + quantity));
-            DataBaseManager.updateStock(product, quantity);
-        }
-        else {
-            DataBaseManager.saveProduct(product, quantity);
-            stock.put(product, quantity);
-            System.out.println("Product added to stock");
-        }
+        DataBaseManager.saveProduct(product, quantity);
         updateStockValue();
     }
     public void removeProduct() throws ItemNotFoundException, NotEnoughStockException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
         Product product = findProductById(idProd);
-        int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many do you want to remove?");
+        int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(product) + " units.\nHow many do you want to remove?");
 
         removeProduct(product, quantity);
     }
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
-        if (stock.get(product) >= quantity) {
-            int newQuantity = stock.get(product) - quantity;
-            stock.replace(product, newQuantity);
+        int currQuantity = DataBaseManager.findProdQuantity(product);
+        if (currQuantity >= quantity) {
+            DataBaseManager.changeStock(product, -quantity);
         } else {
             throw new NotEnoughStockException();
         }
@@ -131,21 +112,22 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "HEIGHT", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Tree).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
+        stock.stream().filter(product -> product instanceof Tree).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
         System.out.println();
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "COLOUR", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Flower).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
+        stock.stream().filter(product -> product instanceof Flower).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
         System.out.println();
         System.out.println("\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "MATERIAL", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
-        stock.keySet().stream().filter(product -> product instanceof Decoration).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
+        stock.stream().filter(product -> product instanceof Decoration).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
     }
     public void showStockQuantities(){
+        Map<Product, Integer> stock =  DataBaseManager.loadStockQuantities();
         System.out.println("STOCK WITH QUANTITIES");
         System.out.println("\tTREES");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
@@ -176,7 +158,7 @@ public class FlowerShop {
             int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
             try{
                 Product product = findProductById(idProd);
-                int quantity = Readers.readInt(product.getName() + ": " + stock.get(product) + " units.\nHow many are they buying?");
+                int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(product) + " units.\nHow many are they buying?");
                 removeProduct(product, quantity);
                 ticket.addProductTicket(product, quantity);
             }
@@ -198,13 +180,14 @@ public class FlowerShop {
         }
     }
     public void showPreviousPurchases(){
+        List<Ticket> tickets = DataBaseManager.loadTickets();
         tickets.forEach(t-> System.out.println(t.toPrettyString()));
     }
     public void showTotalSalesIncome(){
         System.out.printf("TOTAL SALES INCOME: %.2f€\n", getTotalSalesAmount());
     }
     private Product findProductById(int id) throws ItemNotFoundException{
-        Product myProduct = stock.keySet().stream()
+        Product myProduct = stock.stream()
                 .filter(product -> product.getId() == id)
                 .findAny()
                 .orElse(null);
