@@ -1,8 +1,5 @@
-package n1exercici1;
+package n2exercici1;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-@JsonDeserialize(keyUsing = MyProductDeserializer.class)
 public abstract class Product {
     protected static int idProd = 0;
     public enum Type {FLOWER,TREE,DECORATION};
