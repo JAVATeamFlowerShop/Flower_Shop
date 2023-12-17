@@ -1,6 +1,4 @@
-package n1exercici1;
-
-import com.fasterxml.jackson.annotation.JsonValue;
+package n2exercici1;
 
 public class Flower extends Product{
     private static final Type type = Enum.valueOf(Type.class, "FLOWER");
@@ -10,7 +8,7 @@ public class Flower extends Product{
     public Flower(String name, float price, String colour) {
         super(name, price);
         this.colour = colour;
-        this.id = Product.idProd;
+        this.id = idProd;
     }
     public Flower(int id, String name, float price, String colour){
         super(id);
@@ -40,7 +38,6 @@ public class Flower extends Product{
         return String.format("%2d %-15s %-9s %5.2f€", getId(), super.getName(), getColour(), super.getPrice());
     }
     @Override
-    @JsonValue
     public String toString(){
         return String.format("%s,%d,%s,%.2f,%s", getType(), getId(), super.getName(), super.getPrice(), getColour());
     }

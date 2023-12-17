@@ -3,7 +3,7 @@ package n1exercici1;
 import com.fasterxml.jackson.databind.*;
 import n1exercici1.exceptions.NoSuchTypeProductException;
 
-import java.io.*;
+import java.io.IOException;
 
 public class MyProductDeserializer extends KeyDeserializer {
     private static final String TYPE_TREE = "TREE";

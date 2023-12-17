@@ -1,8 +1,10 @@
-package n1exercici1;
+package n2exercici1;
 
-import n1exercici1.exceptions.ItemNotFoundException;
-import n1exercici1.exceptions.NotEnoughStockException;
+import n2exercici1.exceptions.*;
 
+import java.util.Locale;
+
+import n1exercici1.exceptions.*;
 import java.util.Locale;
 
 public class Main {
