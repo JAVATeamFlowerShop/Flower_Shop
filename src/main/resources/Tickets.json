@@ -1,0 +1,38 @@
+[ {
+  "id" : 1,
+  "productMap" : {
+    "TREE,1,lemon tree,45.99,0.95" : 1,
+    "FLOWER,2,rose,3.50,red" : 3
+  },
+  "amount" : 56.49
+}, {
+  "id" : 2,
+  "productMap" : {
+    "DECORATION,4,small vase,12.99,PLASTIC" : 1
+  },
+  "amount" : 12.99
+}, {
+  "id" : 3,
+  "productMap" : {
+    "FLOWER,2,rose,3.50,red" : 1
+  },
+  "amount" : 3.5
+}, {
+  "id" : 4,
+  "productMap" : {
+    "DECORATION,6,wind spinner,5.20,PLASTIC" : 1
+  },
+  "amount" : 5.2
+}, {
+  "id" : 5,
+  "productMap" : {
+    "FLOWER,2,rose,3.50,red" : 10
+  },
+  "amount" : 35.0
+}, {
+  "id" : 6,
+  "productMap" : {
+    "FLOWER,2,rose,3.50,red" : 10
+  },
+  "amount" : 35.0
+} ]

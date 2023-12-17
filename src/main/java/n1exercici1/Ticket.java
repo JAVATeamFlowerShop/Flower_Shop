@@ -1,7 +1,6 @@
 package n1exercici1;
 
 import java.util.*;
-
 public class Ticket {
     private static int idTicket = 0;
     private int id;
@@ -17,17 +16,18 @@ public class Ticket {
     public int getId() {
         return id;
     }
-    public Map<Product, Integer> getProductMap() {
+    public Map<Product, Integer> getProductMap(){
         return productMap;
     }
     public float getAmount() {
         return amount;
     }
-
+    public void decreaseIdTicket(){
+        idTicket--;
+    }
     public void addProductTicket(Product product, int quantity){
         this.productMap.put(product, quantity);
         updateAmount();
-
     }
     private float calcAmount(){
         if (productMap.isEmpty()){
@@ -40,12 +40,15 @@ public class Ticket {
         this.amount = this.calcAmount();
     }
 
-    @Override
-    public String toString(){
+    public String toPrettyString(){
         String header = "TICKET NUMBER " + getId() + "\n---------------------------------------------\n" + String.format("%2s %-15s %-9s %-6s %8s\n", "ID", "NAME", "DETAIL", "PRICE", "QUANTITY");
         StringBuilder products = new StringBuilder();
-        productMap.forEach((key, value) -> products.append(String.format("%s %8d\n", key, value)));
+        productMap.forEach((key, value) -> products.append(String.format("%s %8d\n", key.toPrettyString(), value)));
         String total = "---------------------------------------------\n" + String.format("%28s %.2f€","TOTAL:", getAmount());
         return String.format("%s%s%s\n", header, products, total);
+    }
+    @Override
+    public String toString() {
+        return String.format("%d,%s,%.2f", getId(), productMap, getAmount());
     }
 }
