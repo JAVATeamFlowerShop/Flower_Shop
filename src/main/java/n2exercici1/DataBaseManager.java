@@ -1,7 +1,6 @@
 package n2exercici1;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -21,10 +20,9 @@ public class DataBaseManager {
     private static final String TYPE_DECORATION = "DECORATION";
 
     static{
-        //getProperties();
+        getProperties();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://192.168.56.102:3306/flowershop", "sandy", "1234");
             con = DriverManager.getConnection(connectionURL, user, password);
             statementProd = con.createStatement();
             statementSub = con.createStatement();
@@ -36,20 +34,20 @@ public class DataBaseManager {
         }
 
     }
-//
-//    private static void getProperties(){
-//        Properties properties = new Properties();
-//        try {
-//            properties.load(new FileInputStream(propertiesPath));
-//            connectionURL = (String) properties.get("CONNECTION_URL");
-//            user = (String) properties.get("USER");
-//            password = (String) properties.get("PASSWORD");
-//        }
-//        catch (IOException ex){
-//            ex.printStackTrace();
-//            System.err.println("Problem loading properties");
-//        }
-//    }
+
+    private static void getProperties(){
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream(propertiesPath));
+            connectionURL = (String) properties.get("CONNECTION_URL");
+            user = (String) properties.get("USER");
+            password = (String) properties.get("PASSWORD");
+        }
+        catch (IOException ex){
+            ex.printStackTrace();
+            System.err.println("Problem loading properties");
+        }
+    }
     private static void executeInsert(String query){
         try {
             statementProd.execute(query);
