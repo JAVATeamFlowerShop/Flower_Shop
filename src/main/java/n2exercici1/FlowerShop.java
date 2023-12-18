@@ -2,6 +2,7 @@ package n2exercici1;
 
 import n2exercici1.exceptions.*;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 public class FlowerShop {
@@ -59,26 +60,29 @@ public class FlowerShop {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
-                DataBaseManager.saveProduct(product, quantity);
+                if (stock.stream().anyMatch(p -> p.getType() == product.getType() && p.equals(product))){
+                    DataBaseManager.saveProduct(product, quantity);
+                    stock.add(product);
+                }
+
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
                 product = new Flower(name, price, colour);
                 DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
                 DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
             default -> System.out.println("This option is not valid, product not saved");
         }
         updateStockValue();
     }
-    public void addProduct(Product product, int quantity){
-        DataBaseManager.saveProduct(product, quantity);
-        updateStockValue();
-    }
+
     public void removeProduct() throws ItemNotFoundException, NotEnoughStockException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
@@ -90,7 +94,7 @@ public class FlowerShop {
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
         int currQuantity = DataBaseManager.findProdQuantity(product);
         if (currQuantity >= quantity) {
-            DataBaseManager.changeStock(product, -quantity);
+            DataBaseManager.changeStockQuant(product, -quantity);
         } else {
             throw new NotEnoughStockException();
         }

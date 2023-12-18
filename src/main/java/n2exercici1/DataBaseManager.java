@@ -32,7 +32,6 @@ public class DataBaseManager {
             ex.printStackTrace();
             System.err.println("Problem connecting to database");
         }
-
     }
 
     private static void getProperties(){
@@ -77,21 +76,25 @@ public class DataBaseManager {
         executeInsert(subquery);
         System.out.println("Product successfully saved");
     }
-    public static void changeStock(Product product, int quantity){
+    public static void changeStockQuant(int id, int quantity){
         System.out.println("Updating product stock...");
-        String query = String.format("UPDATE products SET quantity = quantity + %d WHERE id = %d", quantity, product.getId());
+        String query = String.format("UPDATE products SET quantity = quantity + %d WHERE id = %d", quantity, id);
         executeInsert(query);
         System.out.println("Product stock successfully updated");
     }
 
     public static void saveProduct(Product product, int quantity) {
-        int id = product.getId();
-        String query = String.format("SELECT * FROM products WHERE id = %d", id);
+        String name = product.getName();
+        float price = product.getPrice();
+        String type = product.getType().toString();
+
+        String query = String.format("SELECT id FROM products WHERE name = %s AND price = CAST(%.2f AS FLOAT) AND type = %s", name, price, type);
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){
                 System.out.println("Product already exists");
-                changeStock(product, quantity);
+                changeStockQuant(resultSet.getInt("id"), quantity);
+                Product.decreaseId();
             }
             else{
                 addProduct(product, quantity);
