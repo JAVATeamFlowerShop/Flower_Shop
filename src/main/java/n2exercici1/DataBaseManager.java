@@ -102,7 +102,6 @@ public class DataBaseManager {
             ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
-
     }
 
     public static int findProdQuantity(Product product){
@@ -131,7 +130,6 @@ public class DataBaseManager {
             resultSet.close();
             Map<Product, Integer> products = ticket.getProductMap();
             products.forEach((pro, quantity) -> executeInsert(String.format("INSERT INTO tickets_has_products (idTicket, idProduct, quantity) VALUES(%d, %d, %d)", ticket.getId(), pro.getId(), quantity)));
-
         }
         catch (SQLException ex){
             ex.printStackTrace();
@@ -189,7 +187,7 @@ public class DataBaseManager {
     }
 
     private static ResultSet getProducts() throws SQLException{
-        String query = "SELECT * FROM products;";
+        String query = "SELECT * FROM products ORDER BY id;";
         return statementProd.executeQuery(query);
     }
 
@@ -198,6 +196,10 @@ public class DataBaseManager {
         List<Product> products = new ArrayList<>();
         try{
             ResultSet resultSet = getProducts();
+            if (!resultSet.next()){
+                System.out.println("No initial stock found, starting with empty stock.");
+                return products;
+            }
             while(resultSet.next()){
                 int id = resultSet.getInt("id");
                 Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
@@ -215,27 +217,6 @@ public class DataBaseManager {
         return products;
     }
 
-    public static Map<Product, Integer> loadStockQuantities(){
-        Map<Product, Integer> stock = new HashMap<>();
-        try {
-            ResultSet resultSet = getProducts();
-            while(resultSet.next()){
-                int id = resultSet.getInt("id");
-                Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
-                String name = resultSet.getString("name");
-                float price = resultSet.getFloat("price");
-                int quantity = resultSet.getInt("quantity");
-                Product product = loadProduct(id, type.toString(), name, price);
-                stock.put(product, quantity);
-            }
-            resultSet.close();
-        }
-        catch (SQLException ex) {
-            ex.printStackTrace();
-            System.err.println("Problem loading stock data, starting with empty stock");
-        }
-        return stock;
-    }
     public static float calcStockValue(){
         float total = 0.0f;
         String query = "SELECT SUM(quantity * price) FROM products";
@@ -284,7 +265,7 @@ public class DataBaseManager {
 
     public static List<Ticket> loadTickets(){
         List<Ticket> tickets = new ArrayList<>();
-        String query = "SELECT * FROM tickets";
+        String query = "SELECT * FROM tickets ORDER BY id";
         try{
             ResultSet resultSet = statementTic.executeQuery(query);
             while(resultSet.next()){
