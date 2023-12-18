@@ -38,27 +38,10 @@ public class FlowerShop {
     }
 
     public void updateStockValue(){
-        setStockValue(calcValueStore());
+        setStockValue(DataBaseManager.calcStockValue());
     }
     public void updateTotalSalesAmount() {
-        setTotalSalesAmount(calcSalesValue());
-    }
-    public float calcValueStore(){
-        Map<Product, Integer> stock =  DataBaseManager.loadStockQuantities();
-        return calcValue(stock);
-    }
-    private float calcSalesValue(){
-        List<Ticket> tickets = DataBaseManager.loadTickets();
-        return (float)tickets.stream()
-                .mapToDouble(Ticket::getAmount).sum();
-    }
-    private float calcValue(Map<Product, Integer> productQuantityMap){
-        if (productQuantityMap == null){
-            System.out.println("stock nulo");
-            return 0f;
-        } else {
-            return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
-        }
+        setTotalSalesAmount(DataBaseManager.calcSalesValue());
     }
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
