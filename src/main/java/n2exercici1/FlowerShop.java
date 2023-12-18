@@ -38,18 +38,11 @@ public class FlowerShop {
     }
 
     public void updateStockValue(){
-        setStockValue(calcValueStore());
+        setStockValue(DataBaseManager.calcStockValue());
     }
     public void updateTotalSalesAmount() {
-        setTotalSalesAmount(calcSalesValue());
+        setTotalSalesAmount(DataBaseManager.calcSalesValue());
     }
-    public float calcValueStore(){
-        return DataBaseManager.calcStockValue();
-    }
-    private float calcSalesValue(){
-        return DataBaseManager.calcSalesValue();
-    }
-
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -67,19 +60,16 @@ public class FlowerShop {
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
                 product = new Flower(name, price, colour);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             default -> System.out.println("This option is not valid, product not saved");
         }
