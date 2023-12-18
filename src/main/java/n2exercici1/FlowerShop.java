@@ -44,12 +44,22 @@ public class FlowerShop {
         setTotalSalesAmount(calcSalesValue());
     }
     public float calcValueStore(){
-        return DataBaseManager.calcStockValue();
+        Map<Product, Integer> stock =  DataBaseManager.loadStockQuantities();
+        return calcValue(stock);
     }
     private float calcSalesValue(){
-        return DataBaseManager.calcSalesValue();
+        List<Ticket> tickets = DataBaseManager.loadTickets();
+        return (float)tickets.stream()
+                .mapToDouble(Ticket::getAmount).sum();
     }
-
+    private float calcValue(Map<Product, Integer> productQuantityMap){
+        if (productQuantityMap == null){
+            System.out.println("stock nulo");
+            return 0f;
+        } else {
+            return (float) productQuantityMap.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        }
+    }
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -67,19 +77,16 @@ public class FlowerShop {
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
                 product = new Flower(name, price, colour);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
                 DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
             }
             default -> System.out.println("This option is not valid, product not saved");
         }

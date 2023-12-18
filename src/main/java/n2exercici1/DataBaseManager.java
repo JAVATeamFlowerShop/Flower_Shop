@@ -24,6 +24,7 @@ public class DataBaseManager {
         getProperties();
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://192.168.56.102:3306/flowershop", "sandy", "1234");
             con = DriverManager.getConnection(connectionURL, user, password);
             statementProd = con.createStatement();
             statementSub = con.createStatement();
