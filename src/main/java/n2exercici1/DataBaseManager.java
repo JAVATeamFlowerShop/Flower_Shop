@@ -29,7 +29,6 @@ public class DataBaseManager {
             statementTic = con.createStatement();
             statementTicPro = con.createStatement();
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
             System.err.println("Problem connecting to database");
         }
     }
@@ -43,7 +42,6 @@ public class DataBaseManager {
             password = (String) properties.get("PASSWORD");
         }
         catch (IOException ex){
-            ex.printStackTrace();
             System.err.println("Problem loading properties");
         }
     }
@@ -51,7 +49,6 @@ public class DataBaseManager {
         try {
             statementProd.execute(query);
         } catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
     }
@@ -107,7 +104,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
         return isNew;
@@ -123,7 +119,6 @@ public class DataBaseManager {
             return quantity;
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return -1;
@@ -141,7 +136,6 @@ public class DataBaseManager {
             products.forEach((pro, quantity) -> executeInsert(String.format("INSERT INTO tickets_has_products (idTicket, idProduct, quantity) VALUES(%d, %d, %d)", ticket.getId(), pro.getId(), quantity)));
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
     }
@@ -221,7 +215,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem loading stock data, starting with empty stock");
         }
         return products;
@@ -237,7 +230,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return total;
@@ -253,7 +245,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return total;
@@ -288,7 +279,6 @@ public class DataBaseManager {
             return tickets;
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem with database");
             return tickets;
         }
