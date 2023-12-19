@@ -45,6 +45,9 @@ public class FlowerShop {
     public void updateTotalSalesAmount() {
         setTotalSalesAmount(DataBaseManager.calcSalesValue());
     }
+    public void addProductToStockList(Product product){
+        stock.add(product);
+    }
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
@@ -61,21 +64,23 @@ public class FlowerShop {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
-                DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
+                if(DataBaseManager.saveProduct(product, quantity)){
+                    stock.add(product);
+                }
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
                 product = new Flower(name, price, colour);
-                DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
+                if(DataBaseManager.saveProduct(product, quantity)){
+                    stock.add(product);
+                }
             }
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
-                System.out.println(product.toPrettyString());
-                DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
+                if(DataBaseManager.saveProduct(product, quantity)){
+                    stock.add(product);
+                }
             }
             default -> System.out.println("This option is not valid, product not saved");
         }
@@ -86,12 +91,12 @@ public class FlowerShop {
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
         Product product = findProductById(idProd);
-        int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(product) + " units.\nHow many do you want to remove?");
+        int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(idProd) + " units.\nHow many do you want to remove?");
 
         removeProduct(product, quantity);
     }
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
-        int currQuantity = DataBaseManager.findProdQuantity(product);
+        int currQuantity = DataBaseManager.findProdQuantity(product.getId());
         if (currQuantity >= quantity) {
             DataBaseManager.changeStockQuant(product.getId(), -quantity);
         } else {
@@ -123,17 +128,17 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.stream().filter(p -> p instanceof Tree).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
+        stock.stream().filter(p -> p instanceof Tree).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p.getId())));
         System.out.println("\n\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "COLOUR", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.stream().filter(p -> p instanceof Flower).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
+        stock.stream().filter(p -> p instanceof Flower).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p.getId())));
         System.out.println("\n\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.stream().filter(p -> p instanceof Decoration).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
+        stock.stream().filter(p -> p instanceof Decoration).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p.getId())));
     }
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
@@ -148,7 +153,7 @@ public class FlowerShop {
             int idProd = Readers.readInt("Which products is the client buying?\nPlease input product id");
             try{
                 Product product = findProductById(idProd);
-                int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(product) + " units.\nHow many are they buying?");
+                int quantity = Readers.readInt(product.getName() + ": " + DataBaseManager.findProdQuantity(idProd) + " units.\nHow many are they buying?");
                 removeProduct(product, quantity);
                 ticket.addProductTicket(product, quantity);
             }
