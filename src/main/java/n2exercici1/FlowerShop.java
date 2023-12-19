@@ -94,7 +94,7 @@ public class FlowerShop {
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
         int currQuantity = DataBaseManager.findProdQuantity(product);
         if (currQuantity >= quantity) {
-            DataBaseManager.changeStockQuant(product, -quantity);
+            DataBaseManager.changeStockQuant(product.getId(), -quantity);
         } else {
             throw new NotEnoughStockException();
         }
@@ -107,14 +107,12 @@ public class FlowerShop {
         System.out.println();
         System.out.println("\t\t-----------------------------------");
         stock.stream().filter(product -> product instanceof Tree).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
-        System.out.println();
-        System.out.println("\tFLOWERS");
+        System.out.println("\n\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "COLOUR", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
         stock.stream().filter(product -> product instanceof Flower).forEach(p -> System.out.println("\t\t" + p.toPrettyString()));
-        System.out.println();
-        System.out.println("\tDECORATIONS");
+        System.out.println("\n\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %6s", "ID", "NAME", "MATERIAL", "PRICE");
         System.out.println();
         System.out.println("\t\t-----------------------------------");
@@ -127,11 +125,12 @@ public class FlowerShop {
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
         stock.stream().filter(p -> p instanceof Tree).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
-        System.out.println("\tFLOWERS");
+        System.out.println("\n\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "COLOUR", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-        stock.stream().filter(p -> p instanceof Flower).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));System.out.println("\tDECORATIONS");
+        stock.stream().filter(p -> p instanceof Flower).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
+        System.out.println("\n\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
