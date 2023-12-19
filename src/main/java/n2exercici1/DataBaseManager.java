@@ -88,7 +88,8 @@ public class DataBaseManager {
         float price = product.getPrice();
         String type = product.getType().toString();
 
-        String query = String.format("SELECT id FROM products WHERE name = %s AND price = CAST(%.2f AS FLOAT) AND type = %s", name, price, type);
+        String query = String.format("SELECT id FROM products WHERE name = '%s' AND price = CAST(%f AS FLOAT) AND type = '%s';", name, price, type);
+        System.out.println(query);
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){
@@ -200,17 +201,15 @@ public class DataBaseManager {
         try{
             ResultSet resultSet = getProducts();
             if (resultSet.next()){
-                do{
+                do {
                     int id = resultSet.getInt("id");
                     Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
                     String name = resultSet.getString("name");
                     float price = resultSet.getFloat("price");
                     Product product = loadProduct(id, type.toString(), name, price);
                     products.add(product);
-                }
-                while (resultSet.next());
-            }
-            else{
+                } while (resultSet.next());
+            } else {
                 System.out.println("No initial stock found, starting with empty stock.");
                 return products;
             }
