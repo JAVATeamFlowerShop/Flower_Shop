@@ -78,30 +78,31 @@ public class DataBaseManager {
     }
     public static void changeStockQuant(int id, int quantity){
         System.out.println("Updating product stock...");
-        String query = String.format("UPDATE products SET quantity = quantity + %d WHERE id = %d", quantity, id);
+        int newQuantity = quantity + findProdQuantity(id);
+        String query = String.format("UPDATE products SET quantity = %d WHERE id = %d", newQuantity, id);
         executeInsert(query);
         System.out.println("Product stock successfully updated");
     }
 
-    public static void saveProduct(Product product, int quantity) {
+    public static boolean saveProduct(Product product, int quantity) {
         String name = product.getName();
         float price = product.getPrice();
         String type = product.getType().toString();
-
-        /*TODO
-        price casting
-         */
-        String query = String.format("SELECT id FROM products WHERE name = '%s' AND type = '%s';", name, type);
+        boolean isNew = false;
+        String query = String.format("SELECT id FROM products WHERE name = '%s' AND price = CAST(%.2f AS FLOAT) AND type = '%s';", name, price, type);
 
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){
                 System.out.println("Product already exists");
                 changeStockQuant(resultSet.getInt("id"), quantity);
+                System.out.println();
                 Product.decreaseId();
+                isNew = false;
             }
             else{
                 addProduct(product, quantity);
+                isNew = true;
             }
             resultSet.close();
         }
@@ -109,10 +110,11 @@ public class DataBaseManager {
             ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
+        return isNew;
     }
 
-    public static int findProdQuantity(Product product){
-        String query = String.format("SELECT quantity FROM products WHERE id = %d", product.getId());
+    public static int findProdQuantity(int id){
+        String query = String.format("SELECT quantity FROM products WHERE id = %d", id);
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             resultSet.next();
