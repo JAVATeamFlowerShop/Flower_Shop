@@ -36,7 +36,9 @@ public class FlowerShop {
         System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
         return instance;
     }
-
+    public List<Product> getStock(){
+        return stock;
+    }
     public void updateStockValue(){
         setStockValue(DataBaseManager.calcStockValue());
     }
@@ -93,7 +95,7 @@ public class FlowerShop {
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
         int currQuantity = DataBaseManager.findProdQuantity(product);
         if (currQuantity >= quantity) {
-            DataBaseManager.changeStockQuant(product, -quantity);
+            DataBaseManager.changeStockQuant(product.getId(), -quantity);
         } else {
             throw new NotEnoughStockException();
         }

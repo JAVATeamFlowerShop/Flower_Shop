@@ -199,17 +199,20 @@ public class DataBaseManager {
         List<Product> products = new ArrayList<>();
         try{
             ResultSet resultSet = getProducts();
-            if (!resultSet.next()){
+            if (resultSet.next()){
+                do{
+                    int id = resultSet.getInt("id");
+                    Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
+                    String name = resultSet.getString("name");
+                    float price = resultSet.getFloat("price");
+                    Product product = loadProduct(id, type.toString(), name, price);
+                    products.add(product);
+                }
+                while (resultSet.next());
+            }
+            else{
                 System.out.println("No initial stock found, starting with empty stock.");
                 return products;
-            }
-            while(resultSet.next()){
-                int id = resultSet.getInt("id");
-                Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
-                String name = resultSet.getString("name");
-                float price = resultSet.getFloat("price");
-                Product product = loadProduct(id, type.toString(), name, price);
-                products.add(product);
             }
             resultSet.close();
         }
