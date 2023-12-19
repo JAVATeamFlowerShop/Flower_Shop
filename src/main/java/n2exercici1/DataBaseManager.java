@@ -198,6 +198,10 @@ public class DataBaseManager {
         List<Product> products = new ArrayList<>();
         try{
             ResultSet resultSet = getProducts();
+            if(!resultSet.next()){
+                System.out.println("No initial stock found, starting with empty stock");
+                return products;
+            }
             while(resultSet.next()){
                 int id = resultSet.getInt("id");
                 Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
@@ -271,7 +275,6 @@ public class DataBaseManager {
         Map<Product, Integer> productMap = new HashMap<>();
         String query = String.format("SELECT * FROM tickets_has_products WHERE idTicket = %d", idTicket);
         ResultSet resultSetTicPro = statementTicPro.executeQuery(query);
-        resultSetTicPro.next();
         while (resultSetTicPro.next()){
             int id = resultSetTicPro.getInt("idProduct");
             int quantity = resultSetTicPro.getInt("quantity");
@@ -284,7 +287,7 @@ public class DataBaseManager {
 
     public static List<Ticket> loadTickets(){
         List<Ticket> tickets = new ArrayList<>();
-        String query = "SELECT * FROM tickets";
+        String query = "SELECT * FROM tickets ORDER BY id";
         try{
             ResultSet resultSet = statementTic.executeQuery(query);
             while(resultSet.next()){
