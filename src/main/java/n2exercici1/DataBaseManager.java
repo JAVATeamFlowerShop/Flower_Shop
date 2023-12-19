@@ -92,7 +92,7 @@ public class DataBaseManager {
         price casting
          */
         String query = String.format("SELECT id FROM products WHERE name = '%s' AND type = '%s';", name, type);
-        System.out.println(query);
+
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){
