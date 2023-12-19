@@ -45,9 +45,6 @@ public class FlowerShop {
     public void updateTotalSalesAmount() {
         setTotalSalesAmount(DataBaseManager.calcSalesValue());
     }
-    public void addProductToStockList(Product product){
-        stock.add(product);
-    }
     public void addProduct() throws IllegalArgumentException{
         int type = Readers.readInt("Introduce the product type\n" +
                 "1. Decoration\n" +
