@@ -70,7 +70,7 @@ public class DataBaseManager {
         }
         else {
             Decoration decoration = (Decoration) product;
-            subquery = String.format("INSERT INTO decorations VALUES(%d, '%s');", decoration.getId(), decoration.getType());
+            subquery = String.format("INSERT INTO decorations VALUES(%d, '%s');", decoration.getId(), decoration.getMaterial());
         }
         executeInsert(query);
         executeInsert(subquery);
@@ -88,8 +88,11 @@ public class DataBaseManager {
         float price = product.getPrice();
         String type = product.getType().toString();
 
-        String query = String.format("SELECT id FROM products WHERE name = '%s' AND type = '%s';", name, price, type);
-        System.out.println(query);
+        /*TODO
+        price casting
+         */
+        String query = String.format("SELECT id FROM products WHERE name = '%s' AND type = '%s';", name, type);
+
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){

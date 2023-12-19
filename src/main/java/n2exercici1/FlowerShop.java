@@ -61,11 +61,8 @@ public class FlowerShop {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
                 product = new Decoration(name, price, material);
-                if (stock.stream().anyMatch(p -> p.getType() == product.getType() && p.equals(product))){
-                    DataBaseManager.saveProduct(product, quantity);
-                    stock.add(product);
-                }
-
+                DataBaseManager.saveProduct(product, quantity);
+                stock.add(product);
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
@@ -76,6 +73,7 @@ public class FlowerShop {
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
+                System.out.println(product.toPrettyString());
                 DataBaseManager.saveProduct(product, quantity);
                 stock.add(product);
             }
