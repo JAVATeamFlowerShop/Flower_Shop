@@ -28,6 +28,9 @@ public abstract class Product {
         return price;
     }
     public abstract Type getType();
+    public static void decreaseId(){
+        idProd--;
+    }
     public abstract boolean equals(Product p);
     public abstract String toPrettyString();
 }

@@ -58,10 +58,12 @@ public class FlowerShop {
             case 1 -> {
                 String materialString = Readers.readString("Introduce its material (Wood or plastic)").toUpperCase();
                 Decoration.Material material = Enum.valueOf(Decoration.Material.class, materialString);
-                stock.stream().filter(p -> p instanceof Decoration && p.equals(new Decoration(name, price, material)));
                 product = new Decoration(name, price, material);
-                DataBaseManager.saveProduct(product, quantity);
-                stock.add(product);
+                if (stock.stream().anyMatch(p -> p.getType() == product.getType() && p.equals(product))){
+                    DataBaseManager.saveProduct(product, quantity);
+                    stock.add(product);
+                }
+
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
@@ -79,10 +81,7 @@ public class FlowerShop {
         }
         updateStockValue();
     }
-    public void addProduct(Product product, int quantity){
-        DataBaseManager.saveProduct(product, quantity);
-        updateStockValue();
-    }
+
     public void removeProduct() throws ItemNotFoundException, NotEnoughStockException{
         showStockQuantities();
         int idProd = Readers.readInt("What product do you want to remove from the stock?\nPlease input product id");
@@ -94,7 +93,7 @@ public class FlowerShop {
     public void removeProduct(Product product, int quantity) throws NotEnoughStockException{
         int currQuantity = DataBaseManager.findProdQuantity(product);
         if (currQuantity >= quantity) {
-            DataBaseManager.changeStock(product, -quantity);
+            DataBaseManager.changeStockQuant(product, -quantity);
         } else {
             throw new NotEnoughStockException();
         }
@@ -126,17 +125,16 @@ public class FlowerShop {
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "HEIGHT", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-  //      stock.stream().filter(p -> p instanceof Tree).forEach(e->System.out.printf("\t\t%s %8d\n",e.getKey().toPrettyString(), e.getValue()));
+        stock.stream().filter(p -> p instanceof Tree).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
         System.out.println("\tFLOWERS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "COLOUR", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-  //      stock.stream().filter(p -> p instanceof Flower).forEach(e->System.out.printf("\t\t%s %8d\n",e.getKey().toPrettyString(), e.getValue()));
-        System.out.println("\tDECORATIONS");
+        stock.stream().filter(p -> p instanceof Flower).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));System.out.println("\tDECORATIONS");
         System.out.printf("\t\t%2s %-15s %-9s %-6s %8s", "ID", "NAME", "MATERIAL", "PRICE", "QUANTITY");
         System.out.println();
         System.out.println("\t\t--------------------------------------------");
-  //      stock.stream().filter(p -> p instanceof Decoration).forEach(e->System.out.printf("\t\t%s %8d\n",e.getKey().toPrettyString(), e.getValue()));
+        stock.stream().filter(p -> p instanceof Decoration).forEach(p -> System.out.printf("\t\t%s %8d\n",p.toPrettyString(), DataBaseManager.findProdQuantity(p)));
     }
     public void showShopValue(){
         System.out.printf("SHOP'S STOCK VALUE: %.2f€\n", this.stockValue);
