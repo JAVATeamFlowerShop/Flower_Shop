@@ -57,13 +57,13 @@ USER=user
 PASSWORD=password
 ```
 
-## 5. Contributors <a name = "members"></a>
+## 4. Contributors <a name = "members"></a>
 This project is a collaborative efort by three team members:
 - Member 1: [@SandyMrtss](https://github.com/SandyMrtss)
 - Member 2: [@MarcSantasusana](https://github.com/MarcSantasusana)
 - Member 3: [@mayacamps](https://github.com/mayacamps)
 
-## 6. Notes <a name = "notes"></a>
+## 5. Notes <a name = "notes"></a>
 Some potential areas for future enhancements that have been considered are:
 - Maintaining data persistance using MongoDB
 - Managing more than one flower shop
