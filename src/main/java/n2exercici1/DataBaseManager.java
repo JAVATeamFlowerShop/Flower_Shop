@@ -88,7 +88,7 @@ public class DataBaseManager {
         float price = product.getPrice();
         String type = product.getType().toString();
 
-        String query = String.format("SELECT id FROM products WHERE name = '%s' AND price = CAST(%f AS FLOAT) AND type = '%s';", name, price, type);
+        String query = String.format("SELECT id FROM products WHERE name = '%s' AND type = '%s';", name, price, type);
         System.out.println(query);
         try{
             ResultSet resultSet = statementProd.executeQuery(query);

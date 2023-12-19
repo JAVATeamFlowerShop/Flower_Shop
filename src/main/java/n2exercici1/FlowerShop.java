@@ -2,7 +2,6 @@ package n2exercici1;
 
 import n2exercici1.exceptions.*;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class FlowerShop {
@@ -37,7 +36,9 @@ public class FlowerShop {
         System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
         return instance;
     }
-
+    public List<Product> getStock(){
+        return stock;
+    }
     public void updateStockValue(){
         setStockValue(DataBaseManager.calcStockValue());
     }
