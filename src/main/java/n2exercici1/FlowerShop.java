@@ -73,7 +73,6 @@ public class FlowerShop {
             case 3 -> {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
-                System.out.println(product.toPrettyString());
                 DataBaseManager.saveProduct(product, quantity);
                 stock.add(product);
             }
