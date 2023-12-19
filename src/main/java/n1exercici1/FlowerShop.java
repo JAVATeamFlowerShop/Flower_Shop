@@ -7,7 +7,7 @@ import java.util.stream.*;
 
 public class FlowerShop {
     private final String name = "CiberFlower";
-    private static Map<Product, Integer> stock;
+    private Map<Product, Integer> stock;
     private float stockValue;
     private TicketHistory ticketHistory;
     private static FlowerShop instance;
