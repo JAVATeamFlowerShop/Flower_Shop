@@ -8,11 +8,11 @@ The following program was developed as part of the Java programming bootcamp at 
 1. [Requirements](#req)
 2. [Functionality](#func)
 3. [Usage](#use)
-4. [Data Persistance](#persistance)
-    - [JSON Serialization](#json)
-    - [Database Configuration](#mysql)
-5. [Contributors](#members)
-6. [Notes](#notes)
+    1. [Data Persistance](#persistance)
+       - [JSON Serialization](#json)
+       - [Database Configuration](#mysql)
+4. [Contributors](#members)
+5. [Notes](#notes)
 
 ## 1. Requirements <a name = "req"></a>
 - Java Development Kit (JDK) 8 or higher
@@ -36,14 +36,20 @@ Clone the repository to your local machine:
 ```java Cloning repo
 git clone https://github.com/JAVATeamFlowerShop/Flower_Shop.git
 ```
-To execute the program, use a Java IDE (developers team used IntelliJ IDE). Can also be done from the command line as you would with any maven project. Upon running the program, follow the on-screen prompts to execute the program's various functionalitites.
+Before executing the program, read **3.i. Data persistance**.
+<br><br>To execute the program, use a Java IDE (developers team used IntelliJ IDE). Can also be done from the command line as you would with any maven project. Upon running the program, follow the on-screen prompts to execute the program's various functionalitites.
 
-## 4. Data persistance <a name = "persistance"></a>
+### 3.i. Data persistance <a name = "persistance"></a>
 #### JSON Serialization <a name = "json"></a>
 For level 1 data persistance, ensure the file paths in the **'LoadData.java'** file are according to your system setup. This class handles data JSON serialization and deserialization.
 
 #### Database Configuration <a name = "mysql"></a>
-For level 2 data persistance, ensure your MySQL server is running. You can either use the database in this repository or you can create your own. Update the **'database.properties'** file with your MySQL connection details.
+For level 2 data persistance:
+1. Ensure your MySQL server is running
+2. You can either use the database in this repository or you can create your own.
+> The SQL scripts needed to use the given database are located in 'src/main/resources'.
+> <br>There you can find the scripts to create the database and populate both products and tickets.
+3. Update the **'database.properties'** file with your MySQL connection details.
 <br><br>Example:
 ```
 CONNECTION_URL=jdbc:mysql://localhost:3306/flowershop
