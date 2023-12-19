@@ -63,7 +63,6 @@ public class FlowerShop {
                 product = new Decoration(name, price, material);
                 DataBaseManager.saveProduct(product, quantity);
                 stock.add(product);
-
             }
             case 2 -> {
                 String colour = Readers.readString("Introduce its colour");
