@@ -1,7 +1,6 @@
 package n2exercici1;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -30,10 +29,8 @@ public class DataBaseManager {
             statementTic = con.createStatement();
             statementTicPro = con.createStatement();
         } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
             System.err.println("Problem connecting to database");
         }
-
     }
 
     private static void getProperties(){
@@ -45,7 +42,6 @@ public class DataBaseManager {
             password = (String) properties.get("PASSWORD");
         }
         catch (IOException ex){
-            ex.printStackTrace();
             System.err.println("Problem loading properties");
         }
     }
@@ -53,7 +49,6 @@ public class DataBaseManager {
         try {
             statementProd.execute(query);
         } catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
     }
@@ -72,42 +67,50 @@ public class DataBaseManager {
         }
         else {
             Decoration decoration = (Decoration) product;
-            subquery = String.format("INSERT INTO decorations VALUES(%d, '%s');", decoration.getId(), decoration.getType());
+            subquery = String.format("INSERT INTO decorations VALUES(%d, '%s');", decoration.getId(), decoration.getMaterial());
         }
         executeInsert(query);
         executeInsert(subquery);
         System.out.println("Product successfully saved");
     }
-    public static void changeStock(Product product, int quantity){
+    public static void changeStockQuant(int id, int quantity){
         System.out.println("Updating product stock...");
-        String query = String.format("UPDATE products SET quantity = quantity + %d WHERE id = %d", quantity, product.getId());
+        int newQuantity = quantity + findProdQuantity(id);
+        String query = String.format("UPDATE products SET quantity = %d WHERE id = %d", newQuantity, id);
         executeInsert(query);
         System.out.println("Product stock successfully updated");
     }
 
-    public static void saveProduct(Product product, int quantity) {
-        int id = product.getId();
-        String query = String.format("SELECT * FROM products WHERE id = %d", id);
+    public static boolean saveProduct(Product product, int quantity) {
+        String name = product.getName();
+        float price = product.getPrice();
+        String type = product.getType().toString();
+        boolean isNew = false;
+        String query = String.format("SELECT id FROM products WHERE name = '%s' AND price = CAST(%.2f AS FLOAT) AND type = '%s';", name, price, type);
+
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             if(resultSet.next()){
                 System.out.println("Product already exists");
-                changeStock(product, quantity);
+                changeStockQuant(resultSet.getInt("id"), quantity);
+                System.out.println();
+                Product.decreaseId();
+                isNew = false;
             }
             else{
                 addProduct(product, quantity);
+                isNew = true;
             }
             resultSet.close();
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem saving product to database");
         }
-
+        return isNew;
     }
 
-    public static int findProdQuantity(Product product){
-        String query = String.format("SELECT quantity FROM products WHERE id = %d", product.getId());
+    public static int findProdQuantity(int id){
+        String query = String.format("SELECT quantity FROM products WHERE id = %d", id);
         try{
             ResultSet resultSet = statementProd.executeQuery(query);
             resultSet.next();
@@ -116,7 +119,6 @@ public class DataBaseManager {
             return quantity;
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return -1;
@@ -132,10 +134,8 @@ public class DataBaseManager {
             resultSet.close();
             Map<Product, Integer> products = ticket.getProductMap();
             products.forEach((pro, quantity) -> executeInsert(String.format("INSERT INTO tickets_has_products (idTicket, idProduct, quantity) VALUES(%d, %d, %d)", ticket.getId(), pro.getId(), quantity)));
-
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
     }
@@ -190,7 +190,7 @@ public class DataBaseManager {
     }
 
     private static ResultSet getProducts() throws SQLException{
-        String query = "SELECT * FROM products;";
+        String query = "SELECT * FROM products ORDER BY id;";
         return statementProd.executeQuery(query);
     }
 
@@ -199,44 +199,27 @@ public class DataBaseManager {
         List<Product> products = new ArrayList<>();
         try{
             ResultSet resultSet = getProducts();
-            while(resultSet.next()){
-                int id = resultSet.getInt("id");
-                Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
-                String name = resultSet.getString("name");
-                float price = resultSet.getFloat("price");
-                Product product = loadProduct(id, type.toString(), name, price);
-                products.add(product);
+            if (resultSet.next()){
+                do {
+                    int id = resultSet.getInt("id");
+                    Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
+                    String name = resultSet.getString("name");
+                    float price = resultSet.getFloat("price");
+                    Product product = loadProduct(id, type.toString(), name, price);
+                    products.add(product);
+                } while (resultSet.next());
+            } else {
+                System.out.println("No initial stock found, starting with empty stock.");
+                return products;
             }
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem loading stock data, starting with empty stock");
         }
         return products;
     }
 
-    public static Map<Product, Integer> loadStockQuantities(){
-        Map<Product, Integer> stock = new HashMap<>();
-        try {
-            ResultSet resultSet = getProducts();
-            while(resultSet.next()){
-                int id = resultSet.getInt("id");
-                Product.Type type = Product.Type.valueOf(resultSet.getString("type"));
-                String name = resultSet.getString("name");
-                float price = resultSet.getFloat("price");
-                int quantity = resultSet.getInt("quantity");
-                Product product = loadProduct(id, type.toString(), name, price);
-                stock.put(product, quantity);
-            }
-            resultSet.close();
-        }
-        catch (SQLException ex) {
-            ex.printStackTrace();
-            System.err.println("Problem loading stock data, starting with empty stock");
-        }
-        return stock;
-    }
     public static float calcStockValue(){
         float total = 0.0f;
         String query = "SELECT SUM(quantity * price) FROM products";
@@ -247,7 +230,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return total;
@@ -263,7 +245,6 @@ public class DataBaseManager {
             resultSet.close();
         }
         catch (SQLException ex){
-            ex.printStackTrace();
             System.err.println("Problem with database");
         }
         return total;
@@ -272,7 +253,6 @@ public class DataBaseManager {
         Map<Product, Integer> productMap = new HashMap<>();
         String query = String.format("SELECT * FROM tickets_has_products WHERE idTicket = %d", idTicket);
         ResultSet resultSetTicPro = statementTicPro.executeQuery(query);
-        resultSetTicPro.next();
         while (resultSetTicPro.next()){
             int id = resultSetTicPro.getInt("idProduct");
             int quantity = resultSetTicPro.getInt("quantity");
@@ -285,7 +265,7 @@ public class DataBaseManager {
 
     public static List<Ticket> loadTickets(){
         List<Ticket> tickets = new ArrayList<>();
-        String query = "SELECT * FROM tickets";
+        String query = "SELECT * FROM tickets ORDER BY id";
         try{
             ResultSet resultSet = statementTic.executeQuery(query);
             while(resultSet.next()){
@@ -299,7 +279,6 @@ public class DataBaseManager {
             return tickets;
         }
         catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Problem with database");
             return tickets;
         }

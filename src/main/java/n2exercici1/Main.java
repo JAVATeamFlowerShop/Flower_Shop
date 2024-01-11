@@ -4,15 +4,11 @@ import n2exercici1.exceptions.*;
 
 import java.util.Locale;
 
-import n2exercici1.exceptions.*;
-import java.util.Locale;
-
 public class Main {
     private static FlowerShop myShop;
     static {
         Locale.setDefault(Locale.ENGLISH);
         createFlowerShop();
-        System.out.println(myShop.getStock());
     }
 
     public static void main(String[] args) {
@@ -35,10 +31,6 @@ public class Main {
                 case 8 -> myShop.showTotalSalesIncome();
                 case 0 -> {
                     exit = true;
-                    System.out.println("Saving stock...");
-                    DataBaseManager.saveStock(myShop.getStock());
-                    System.out.println("Saving tickets...");
-                    LoadData.saveTickets(myShop.getTicketHistory());
                     System.out.println("Bye! You exited flower shop management.");
                 }
                 default -> System.err.println("Please introduce a valid option.\n");
