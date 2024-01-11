@@ -4,7 +4,7 @@ import n2exercici1.exceptions.*;
 
 import java.util.Locale;
 
-import n1exercici1.exceptions.*;
+import n2exercici1.exceptions.*;
 import java.util.Locale;
 
 public class Main {
@@ -36,7 +36,7 @@ public class Main {
                 case 0 -> {
                     exit = true;
                     System.out.println("Saving stock...");
-                    LoadData.saveStock(myShop.getStock());
+                    DataBaseManager.saveStock(myShop.getStock());
                     System.out.println("Saving tickets...");
                     LoadData.saveTickets(myShop.getTicketHistory());
                     System.out.println("Bye! You exited flower shop management.");

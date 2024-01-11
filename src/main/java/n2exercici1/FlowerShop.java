@@ -19,6 +19,9 @@ public class FlowerShop {
     public String getName() {
         return name;
     }
+    public List<Product> getStock(){
+        return stock;
+    }
     public float getTotalSalesAmount() {
         return totalSalesAmount;
     }
