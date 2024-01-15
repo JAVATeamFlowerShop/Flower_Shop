@@ -87,7 +87,6 @@ public class FlowerShop {
                 float height = Readers.readFloat("Introduce its height");
                 product = new Tree(name, price, height);
             }
-            default -> System.out.println("This option is not valid");
         }
         addProduct(product, quantity);
     }

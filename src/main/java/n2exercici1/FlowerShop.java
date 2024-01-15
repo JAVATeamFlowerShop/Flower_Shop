@@ -39,9 +39,6 @@ public class FlowerShop {
         System.err.println("Uh oh!! A Flower Shop already exists. \nCan create ONLY ONE flower shop.\n");
         return instance;
     }
-    public List<Product> getStock(){
-        return stock;
-    }
     public void updateStockValue(){
         setStockValue(DataBaseManager.calcStockValue());
     }
@@ -49,10 +46,14 @@ public class FlowerShop {
         setTotalSalesAmount(DataBaseManager.calcSalesValue());
     }
     public void addProduct() throws IllegalArgumentException{
-        int type = Readers.readInt("Introduce the product type\n" +
-                "1. Decoration\n" +
-                "2. Flower\n" +
-                "3. Tree");
+        int type;
+        do{
+            type = Readers.readInt("Introduce the product type\n" +
+                    "1. Decoration\n" +
+                    "2. Flower\n" +
+                    "3. Tree");
+        }
+        while (type < 1 || type > 3);
         String name = Readers.readString("Introduce its name");
         int quantity = Readers.readInt("Introduce its quantity");
         float price = Readers.readFloat("Introduce its price");
@@ -82,7 +83,6 @@ public class FlowerShop {
                     stock.add(product);
                 }
             }
-            default -> System.out.println("This option is not valid, product not saved");
         }
         updateStockValue();
     }
