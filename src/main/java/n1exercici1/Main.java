@@ -10,7 +10,6 @@ public class Main {
     static {
         Locale.setDefault(Locale.ENGLISH);
         createFlowerShop();
-        System.out.println(myShop.getStock());
     }
 
     public static void main(String[] args) {
