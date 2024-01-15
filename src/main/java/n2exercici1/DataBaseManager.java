@@ -46,10 +46,11 @@ public class DataBaseManager {
         }
     }
     private static void executeInsert(String query){
-        try {
+        try{
             statementProd.execute(query);
-        } catch (SQLException ex) {
-            System.err.println("Problem saving product to database");
+        }
+        catch (SQLException ex){
+            System.err.println("Problem executing insert to database");
         }
     }
 
@@ -95,7 +96,6 @@ public class DataBaseManager {
                 changeStockQuant(resultSet.getInt("id"), quantity);
                 System.out.println();
                 Product.decreaseId();
-                isNew = false;
             }
             else{
                 addProduct(product, quantity);
