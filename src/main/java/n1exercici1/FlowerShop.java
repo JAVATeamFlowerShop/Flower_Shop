@@ -58,10 +58,15 @@ public class FlowerShop {
         }
     }
     public void addProduct() throws IllegalArgumentException{
-        int type = Readers.readInt("Introduce the product type\n" +
-                "1. Decoration\n" +
-                "2. Flower\n" +
-                "3. Tree");
+        int type;
+        do{
+            type = Readers.readInt("Introduce the product type\n" +
+                    "1. Decoration\n" +
+                    "2. Flower\n" +
+                    "3. Tree");
+        }
+        while (type < 1 || type > 3);
+
         String name = Readers.readString("Introduce its name");
         int quantity = Readers.readInt("Introduce its quantity");
         float price = Readers.readFloat("Introduce its price");
