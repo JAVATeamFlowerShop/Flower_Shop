@@ -17,6 +17,14 @@ class TestFlowerShop {
         myShop.addProduct(decoration, 5);
     }
 
+    @DisplayName("total value store test")
+    @Test
+    @Order(1)
+    void testCalcValueStore() {
+        float value = myShop.calcValueStore();
+        assertEquals(3918, Math.round(value));
+    }
+
     @DisplayName("add non previously existent product")
     @Test
     @Order(2)
@@ -26,7 +34,6 @@ class TestFlowerShop {
         final int[] quantity = new int[1];
         myShop.getStock().entrySet().stream().filter(e -> e.getKey() instanceof Flower && e.getKey().equals(flower)).forEach(e -> quantity[0] = e.getValue());
         assertEquals(7, quantity[0]);
-
     }
 
     @DisplayName("add previously existent product")
@@ -57,14 +64,6 @@ class TestFlowerShop {
     void testRemoveProductException() {
         assertThrows(NotEnoughStockException.class,
                 () -> myShop.removeProduct(decoration, 7));
-    }
-
-    @DisplayName("total value store test")
-    @Test
-    @Order(1)
-    void testCalcValueStore() {
-        float value = myShop.calcValueStore();
-        assertEquals(3918, Math.round(value));
     }
 
     @DisplayName("store stock value gets updated when adding product")
